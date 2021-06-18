@@ -1,0 +1,13 @@
+{
+  "server-name": "search-console",
+  "group-name": "Default",
+  "server-type": "http",
+  "root": "/",
+  "port": 8003,
+  "error-handler": "",
+  "url-rewriter": "/rewriter.xml",
+  "rewrite-resolves-globally": false,
+  "content-database": "search-console-content",
+  "modules-database": "search-console-modules",
+  "default-user": "nobody"
+}

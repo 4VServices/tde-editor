@@ -1,0 +1,11 @@
+<rewriter xmlns="http://marklogic.com/xdmp/rewriter">
+  <match-path matches="^(/api/.*)">
+    <dispatch>$1.sjs</dispatch>
+  </match-path>
+  <match-path matches="^/$">
+    <dispatch>/public/index.html</dispatch>
+  </match-path>
+  <match-path matches="^/(.*)">
+    <dispatch>/public/$1</dispatch>
+  </match-path>
+</rewriter>
