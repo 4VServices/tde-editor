@@ -1,4 +1,3 @@
-import { Button } from 'bootstrap';
 import React from 'react';
 import Container from 'react-bootstrap/esm/Container';
 import './ExtractedTriples.css';

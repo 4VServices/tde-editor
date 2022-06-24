@@ -1,25 +1,40 @@
-import React from "react";
-import "./Menu.css";
-import Row from "react-bootstrap/Row";
-import Dropdown from "react-bootstrap/Dropdown";
-import Container from "react-bootstrap/esm/Container";
+import React from 'react';
+import './Menu.css';
+import Row from 'react-bootstrap/Row';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Container from 'react-bootstrap/esm/Container';
 
 class Menu extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleMenuSelect(dbName, event) {
+    this.props.onContentDbSelected(dbName);
+  }
+
+  handleTemplateSelect(template, event) {
+    this.props.onTemplateSelected(template);
+    console.log(`handleTemplateSelect: ${JSON.stringify(template)}`);
+  }
+
   render() {
     return (
       <Container>
         <Row>Content Database</Row>
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            select
-          </Dropdown.Toggle>
+        <DropdownButton title={this.props.selectedContentDb}>
+          {this.props.contentDBs.map((db) => (
+            <Dropdown.Item onClick={(e) => this.handleMenuSelect(db, e)}>{db}</Dropdown.Item>
+          ))}
+        </DropdownButton>
 
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">project1-content</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">project2-content</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">project3-content</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        <Row>Template</Row>
+        <DropdownButton title={this.props.selectedTemplateURI}>
+          {this.props.templates.map((template) => (
+            <Dropdown.Item onClick={(e) => this.handleTemplateSelect(template.uri, e)}>{template.uri}</Dropdown.Item>
+          ))}
+        </DropdownButton>
       </Container>
     );
   }

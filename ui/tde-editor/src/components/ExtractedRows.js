@@ -1,7 +1,6 @@
 import React from 'react';
 import './ExtractedRows.css';
 import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
 
 class ExtractedRows extends React.Component {
   render() {
