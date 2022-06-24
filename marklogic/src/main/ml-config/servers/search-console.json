@@ -1,5 +1,5 @@
 {
-  "server-name": "search-console",
+  "server-name": "%%mlAppName%%",
   "group-name": "Default",
   "server-type": "http",
   "root": "/",
@@ -7,7 +7,7 @@
   "error-handler": "",
   "url-rewriter": "/rewriter.xml",
   "rewrite-resolves-globally": false,
-  "content-database": "search-console-content",
-  "modules-database": "search-console-modules",
+  "content-database": "%%DATABASE%%",
+  "modules-database": "%%MODULES_DATABASE%%",
   "default-user": "nobody"
 }
