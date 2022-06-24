@@ -1,3 +1,4 @@
 node_modules
 ui/node_modules
 ui/tde_editor/node_modules
+marklogic/src/main/ml-modules/ui
