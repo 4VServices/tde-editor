@@ -3,9 +3,9 @@
     <dispatch>$1.sjs</dispatch>
   </match-path>
   <match-path matches="^/$">
-    <dispatch>/public/index.html</dispatch>
+    <dispatch>/index.html</dispatch>
   </match-path>
   <match-path matches="^/(.*)">
-    <dispatch>/public/$1</dispatch>
+    <dispatch>/$1</dispatch>
   </match-path>
 </rewriter>
