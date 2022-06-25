@@ -41,7 +41,11 @@ class Template extends React.Component {
               Collection
             </Form.Label>
             <Col md="10">
-              <Form.Control type="text" placeholder="" />
+              <Form.Control
+                type="text"
+                placeholder={this.props.collection}
+                onChange={(event) => this.props.handleCollectionChange(event.target.value)}
+              />
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="template.directory">

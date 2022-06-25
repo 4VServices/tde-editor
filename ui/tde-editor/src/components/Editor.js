@@ -29,6 +29,7 @@ class Editor extends React.Component {
     this.handleURIChange = this.handleURIChange.bind(this);
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleContextChange = this.handleContextChange.bind(this);
+    this.handleCollectionChange = this.handleCollectionChange.bind(this);
     this.handleValidate = this.handleValidate.bind(this);
     this.state = {
       contentDBs: [],
@@ -76,6 +77,12 @@ class Editor extends React.Component {
   handleContextChange(context) {
     let template = this.state.templateJSON;
     template.template.context = context;
+    this.setState({ templateJSON: template });
+  }
+
+  handleCollectionChange(collection) {
+    let template = this.state.templateJSON;
+    template.template.collections = [collection];
     this.setState({ templateJSON: template });
   }
 
@@ -220,10 +227,12 @@ class Editor extends React.Component {
             <Template
               templateURI={this.state.selectedTemplateURI}
               context={this.state.templateJSON.template.context}
+              collection={this.state.templateJSON.template.collections}
               description={this.state.templateJSON.template.description}
               handleURIChange={this.handleURIChange}
               handleDescriptionChange={this.handleDescriptionChange}
               handleContextChange={this.handleContextChange}
+              handleCollectionChange={this.handleCollectionChange}
             />
           </Row>
           <Row>
