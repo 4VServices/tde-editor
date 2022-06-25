@@ -16,7 +16,11 @@ class Template extends React.Component {
               URI
             </Form.Label>
             <Col md="10">
-              <Form.Control type="text" placeholder="/tde/myTemplate.json" />
+              <Form.Control
+                type="text"
+                placeholder={this.props.templateURI}
+                onChange={(event) => this.props.handleURIChange(event.target.value)}
+              />
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="template.description">
@@ -24,7 +28,12 @@ class Template extends React.Component {
               Description
             </Form.Label>
             <Col md="10">
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control
+                type="textarea"
+                rows={3}
+                placeholder={this.props.description}
+                onChange={(event) => this.props.handleDescriptionChange(event.target.value)}
+              />
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="template.collection">
@@ -48,7 +57,11 @@ class Template extends React.Component {
               Context
             </Form.Label>
             <Col md="10">
-              <Form.Control type="text" placeholder="/" />
+              <Form.Control
+                type="text"
+                placeholder={this.props.context}
+                onChange={(event) => this.props.handleContextChange(event.target.value)}
+              />
             </Col>
           </Form.Group>
         </Form>
