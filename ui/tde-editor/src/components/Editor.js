@@ -15,8 +15,7 @@ function defaultTemplate() {
   return {
     template: {
       context: '',
-      collections: [],
-      rows: []
+      collections: []
     }
   };
 }
@@ -31,6 +30,7 @@ class Editor extends React.Component {
     this.handleContextChange = this.handleContextChange.bind(this);
     this.handleCollectionChange = this.handleCollectionChange.bind(this);
     this.handleValidate = this.handleValidate.bind(this);
+    this.toggleShowNotification = this.toggleShowNotification.bind(this);
     this.state = {
       contentDBs: [],
       selectedContentDb: 'select',
