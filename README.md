@@ -4,6 +4,17 @@ A TDE Template editor
 
 ## Using the Editor
 
+The brief version:
+
+- Select a content database. This database should have some content you want to extract from.
+- Optionally select a template from the database. If you don't select an existing one, then you're working on a new
+  one.
+- The Insert button will insert the template into the schemas database associated with your selected content database.
+- The Export button will let you save the template to your local file system.
+- The Validation button will check whether your template is valid.
+- The Extract button will use your template to extract data from the Sample Documents you have selected and display
+  the results in the form.
+
 ## Developers
 
 This application is entirely hosted in MarkLogic with no middle tier. The UI code needs to brought into MarkLogic to
