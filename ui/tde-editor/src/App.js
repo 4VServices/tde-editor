@@ -16,7 +16,9 @@ function App() {
             <img src={logo} className="App-logo" alt="logo" />
           </Col>
           <Col>TDE Template Editor</Col>
-          <Col>Built by 4V Services</Col>
+          <Col>
+            Built by <a href="http://4VServices.com">4V Services</a>
+          </Col>
         </Row>
         <Editor />
       </Container>
