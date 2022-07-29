@@ -1,0 +1,16 @@
+{
+  "match": {
+    "id": 3,
+    "match-date": "2022-03-12",
+    "league": "MLS",
+    "teams": {
+      "home": "Philadelphia",
+      "away": "San Jose"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "abstract": "First shutout of the year; Jim Curtin's 100th regular season win"
+  }
+}

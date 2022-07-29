@@ -1,0 +1,16 @@
+{
+  "match": {
+    "id": 1,
+    "match-date": "2022-02-26",
+    "league": "MLS",
+    "teams": {
+      "home": "Philadelphia",
+      "away": "Minnesota"
+    },
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "abstract": "Burke scores in opener"
+  }
+}

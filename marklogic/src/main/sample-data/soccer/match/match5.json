@@ -1,0 +1,16 @@
+{
+  "match": {
+    "id": 5,
+    "match-date": "2022-04-02",
+    "league": "MLS",
+    "teams": {
+      "home": "Philadelphia",
+      "away": "Charlotte"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "abstract": "A goal in each half and shutout"
+  }
+}

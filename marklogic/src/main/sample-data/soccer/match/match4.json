@@ -1,0 +1,16 @@
+{
+  "match": {
+    "id": 4,
+    "match-date": "2022-03-19",
+    "league": "MLS",
+    "teams": {
+      "home": "New York City",
+      "away": "Philadelphia"
+    },
+    "score": {
+      "home": 0,
+      "away": 2
+    },
+    "abstract": "A strong first half leads Philadelphia to the win"
+  }
+}

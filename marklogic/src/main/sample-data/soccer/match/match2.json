@@ -1,0 +1,16 @@
+{
+  "match": {
+    "id": 2,
+    "match-date": "2022-03-05",
+    "league": "MLS",
+    "teams": {
+      "home": "Montreal",
+      "away": "Philadelphia"
+    },
+    "score": {
+      "home": 1,
+      "away": 2
+    },
+    "abstract": "Two quick goals make the difference"
+  }
+}
