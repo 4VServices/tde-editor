@@ -6,6 +6,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 class Template extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleURIChange = this.handleURIChange.bind(this);
+  }
+
+  handleURIChange(uri) {
+    this.props.handleURIChange(uri);
+  }
+
   render() {
     return (
       <Container className="template">
@@ -18,8 +27,8 @@ class Template extends React.Component {
             <Col md="10">
               <Form.Control
                 type="text"
-                placeholder={this.props.templateURI}
-                onChange={(event) => this.props.handleURIChange(event.target.value)}
+                value={this.props.templateURI}
+                onChange={(event) => this.handleURIChange(event.target.value)}
               />
             </Col>
           </Form.Group>

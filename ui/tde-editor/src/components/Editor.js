@@ -39,7 +39,8 @@ class Editor extends React.Component {
       templateJSON: defaultTemplate(),
       msgHeader: '',
       msgBody: '',
-      showNotification: false
+      showNotification: false,
+      sampleURIs: []
     };
   }
 
@@ -84,6 +85,16 @@ class Editor extends React.Component {
     let template = this.state.templateJSON;
     template.template.collections = [collection];
     this.setState({ templateJSON: template });
+  }
+
+  handleRowChange(changedIndex, property, value) {
+    let template = this.state.templateJSON;
+    template.template.rows.map((row, index) => {
+      if (index === changedIndex) {
+        row[property] = value;
+      }
+      return row;
+    });
   }
 
   handleValidate() {
@@ -233,16 +244,17 @@ class Editor extends React.Component {
               handleDescriptionChange={this.handleDescriptionChange}
               handleContextChange={this.handleContextChange}
               handleCollectionChange={this.handleCollectionChange}
+              handleRowChange={this.handleRowChange}
             />
           </Row>
           <Row>
-            <SampleDocs />
+            <SampleDocs uris={this.state.sampleURIs} />
           </Row>
           <Row>
             <Variables />
           </Row>
           <Row>
-            <ViewRows />
+            <ViewRows rowsSpec={this.state.templateJSON.template.rows} />
           </Row>
           <Row>
             <Triples />
