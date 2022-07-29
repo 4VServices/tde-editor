@@ -3,7 +3,7 @@
   "group-name": "Default",
   "server-type": "http",
   "root": "/",
-  "port": 8003,
+  "port": %%appPort%%,
   "error-handler": "",
   "url-rewriter": "/rewriter.xml",
   "rewrite-resolves-globally": false,
