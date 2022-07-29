@@ -1,0 +1,68 @@
+{
+  "template": {
+    "context": "/match",
+    "collections": ["soccer"],
+    "vars": [
+      {
+        "name": "prefix",
+        "val": "'https://4VServices.com/soccer/'"
+      },
+      {
+        "name": "home-team",
+        "val": "sem:iri($prefix || '/' || fn:replace(teams/home, ' ', '_'))"
+      },
+      {
+        "name": "away-team",
+        "val": "sem:iri($prefix || '/' || fn:replace(teams/away, ' ', '_'))"
+      },
+      {
+        "name": "doc-id",
+        "val": "sem:iri(xdmp:node-uri(.))"
+      }
+    ],
+    "rows": [
+      {
+        "schemaName": "soccer",
+        "viewName": "matches",
+        "columns": [
+          {
+            "name": "id",
+            "scalarType": "long",
+            "val": "meta/id"
+          },
+          {
+            "name": "document",
+            "scalarType": "string",
+            "val": "meta/documentLocation"
+          },
+          {
+            "name": "date",
+            "scalarType": "date",
+            "val": "fn:concat('20', meta/event/date/year, '-', meta/event/date/month, '-', meta/event/date/day )"
+          },
+          {
+            "name": "league",
+            "scalarType": "string",
+            "val": "meta/event/competition"
+          }
+        ]
+      }
+    ],
+    "triples": [
+      {
+        "subject": { "val": "$doc-id" },
+        "predicate": {
+          "val": "sem:iri($prefix || (if (score/home eq score/away) then 'draw' else 'win'))"
+        },
+        "object": { "val": "if (score/home ge score/away) then $home-team else $away-team" }
+      },
+      {
+        "subject": { "val": "$doc-id" },
+        "predicate": {
+          "val": "sem:iri($prefix || (if (score/home eq score/away) then 'draw' else 'loss'))"
+        },
+        "object": { "val": "if (score/home ge score/away) then $away-team else $home-team" }
+      }
+    ]
+  }
+}
