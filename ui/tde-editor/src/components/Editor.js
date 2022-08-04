@@ -30,6 +30,7 @@ class Editor extends React.Component {
     this.handleContextChange = this.handleContextChange.bind(this);
     this.handleCollectionChange = this.handleCollectionChange.bind(this);
     this.handleValidate = this.handleValidate.bind(this);
+    this.addURI = this.addURI.bind(this);
     this.toggleShowNotification = this.toggleShowNotification.bind(this);
     this.state = {
       contentDBs: [],
@@ -67,6 +68,10 @@ class Editor extends React.Component {
 
   handleURIChange(templateURI) {
     this.setState({ selectedTemplateURI: templateURI });
+  }
+
+  addURI(contentURI) {
+    this.setState({ sampleURIs: this.state.sampleURIs.concat(contentURI) });
   }
 
   handleDescriptionChange(description) {
@@ -248,7 +253,12 @@ class Editor extends React.Component {
             />
           </Row>
           <Row>
-            <SampleDocs uris={this.state.sampleURIs} />
+            <SampleDocs
+              uris={this.state.sampleURIs}
+              addURI={this.addURI}
+              authHeaders={this.buildAuthHeaders()}
+              contentDB={this.state.selectedContentDb}
+            />
           </Row>
           <Row>
             <Variables />
