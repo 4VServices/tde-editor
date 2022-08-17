@@ -9,7 +9,7 @@ class ViewRows extends React.Component {
   render() {
     return (
       <Container className="viewRows">
-        <h3>View Rows</h3>
+        <h2>View Rows</h2>
         {this.props.rowsSpec &&
           this.props.rowsSpec.map((row, index) => (
             <ViewRow viewRow={row} index={index} handleRowChange={this.props.handleRowChange} />
