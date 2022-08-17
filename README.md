@@ -2,7 +2,16 @@
 
 A TDE Template editor
 
+## Overview of TDE
+
+Template-Driven Extraction lets developers build a template to specify information to be read from target documents and
+used to populate relational-style views, semantic triples, or both.
+
+[Tutorial](https://developer.marklogic.com/learn/template-driven-extraction/)
+
 ## Using the Editor
+
+After deploying, the editor is available at http://localhost:8003.
 
 The brief version:
 
@@ -50,17 +59,8 @@ Run `./gradlew mlLoadSchemas` to load the sample TDE Template. This will go into
 
 ### Deploying the UI
 
-Because MarkLogic is hosting the UI, we need to first build the files, then deploy them to MarkLogic.
-
-```
-cd ui/tde-editor/
-npm run build
-cd ../../marklogic
-./gradlew mlLoadModules
-```
-
-You may find it helpful to have a terminal in the ui/tde-editor directory to do the build and a separate one in the
-marklogic directory to load the modules.
+Because MarkLogic is hosting the UI, we need to first build the files, then deploy them to MarkLogic. The `build.ps1`
+script does this.
 
 ### Running the application
 
