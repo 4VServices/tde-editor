@@ -138,6 +138,31 @@ class Editor extends React.Component {
       );
   }
 
+  handleTemplateExtract() {
+    let headers = this.buildAuthHeaders();
+    headers.append('Content-Type', 'application/json');
+    let uriParam = this.state.sampleURIs.map((uri) => `uri=${uri}`).join('&');
+    fetch(`/api/tde/template/extract?${uriParam}&contentDB=${this.state.selectedContentDb}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(this.state.templateJSON)
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log(`extraction call succeeded: ${JSON.stringify(result)}`);
+          // TODO: take the results of extraction and display.
+        },
+        (error) => {
+          console.log(`extraction call failed: ${error}`);
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      );
+  }
+
   getTemplates(dbName) {
     fetch(`/api/tde/templates?contentDB=${dbName}`, {
       method: 'GET',
@@ -228,6 +253,7 @@ class Editor extends React.Component {
             selectedContentDb={this.state.selectedContentDb}
             templates={this.state.templates}
             onTemplateSelected={this.handleTemplateChange}
+            onTemplateExtract={this.handleTemplateExtract}
             selectedTemplateURI={this.state.selectedTemplateURI}
             handleValidate={this.handleValidate}
           ></Menu>

@@ -1,29 +1,37 @@
-const tde = require("/MarkLogic/tde.xqy"),
-      template = xdmp.getRequestBody(),
-      uri = xdmp.getRequestField("uri");
-if (uri !== undefined && uri !== null && !fn.empty(uri)) {
-  if (fn.docAvailable(uri)) {
+const tde = require('/MarkLogic/tde.xqy');
+const template = xdmp.getRequestBody();
+const uris = xdmp.getRequestField('uri');
+const contentDB = xdmp.getRequestField('contentDB');
+
+function extract(uris, template) {
+  if (uris !== undefined && uris !== null) {
+    if (!Array.isArray(uris)) {
+      uris = [uris];
+    }
+    docs = uris.map((uri) => {
+      if (fn.docAvailable(uri)) {
+        return cts.doc(uri);
+      } else {
+        xdmp.setResponseCode(400, `MISSING DOCUMENT: ${uri}`);
+      }
+    });
     if (template !== undefined && template !== null && !fn.empty(template)) {
-      let validTemplate = xdmp.toJSON(tde.validate([template])).toObject()
+      let validTemplate = xdmp.toJSON(tde.validate([template])).toObject();
       if (validTemplate.valid === true) {
-        tde.nodeDataExtract([cts.doc( uri )],[template]) 
+        return tde.nodeDataExtract(docs, [template]);
+      } else {
+        xdmp.setResponseCode(400, 'Bad Request');
       }
-      else {
-        fn.error(xs.QName('ERROR'),'API-SRVEXERR',
-          Sequence.from([400,'TEMPLATE-ERROR','Template provided is invalid ' + validTemplate.message]))
-      }
+    } else {
+      xdmp.setResponseCode(400, 'MISSING-BODY');
     }
-    else {
-      fn.error(xs.QName('ERROR'),'API-SRVEXERR',
-          Sequence.from([400,'MISSING-BODY','Template is a required text in the body']))
-    }
-  }
-  else {
-    fn.error(xs.QName('ERROR'),'API-SRVEXERR',
-      Sequence.from([400,'MISSING-DOCUMENT','Document not found with the uri: '+ uri]))
+  } else {
+    xdmp.setResponseCode(400, 'MISSING URI PARAMETER');
   }
 }
-else {
-  fn.error(xs.QName('ERROR'),'API-SRVEXERR',
-      Sequence.from([400,'MISSING-PARAMETER','uri is a required parameter']))
+
+if (contentDB === xdmp.databaseName(xdmp.database())) {
+  extract(uris, template);
+} else {
+  xdmp.invokeFunction(() => extract(uris, template), { database: xdmp.database(contentDB) });
 }

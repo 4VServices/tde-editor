@@ -30,6 +30,7 @@ class Menu extends React.Component {
   }
 
   handleExtract() {
+    this.props.onTemplateExtract();
     console.log('handleExtract');
   }
 
