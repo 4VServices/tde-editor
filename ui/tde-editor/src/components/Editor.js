@@ -30,6 +30,7 @@ class Editor extends React.Component {
     this.handleContextChange = this.handleContextChange.bind(this);
     this.handleCollectionChange = this.handleCollectionChange.bind(this);
     this.handleValidate = this.handleValidate.bind(this);
+    this.handleTemplateExtract = this.handleTemplateExtract.bind(this);
     this.addURI = this.addURI.bind(this);
     this.toggleShowNotification = this.toggleShowNotification.bind(this);
     this.state = {
@@ -139,6 +140,7 @@ class Editor extends React.Component {
   }
 
   handleTemplateExtract() {
+    console.log('Editor.js; handleTemplateExtract');
     let headers = this.buildAuthHeaders();
     headers.append('Content-Type', 'application/json');
     let uriParam = this.state.sampleURIs.map((uri) => `uri=${uri}`).join('&');

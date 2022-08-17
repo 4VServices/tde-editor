@@ -29,11 +29,6 @@ class Menu extends React.Component {
     console.log('handleExport');
   }
 
-  handleExtract() {
-    this.props.onTemplateExtract();
-    console.log('handleExtract');
-  }
-
   render() {
     return (
       <Container>
@@ -58,7 +53,7 @@ class Menu extends React.Component {
             <Button onClick={this.handleInsert}>Insert</Button>
             <Button onClick={this.handleExport}>Export</Button>
             <Button onClick={this.props.handleValidate}>Validate</Button>
-            <Button onClick={this.handleExtract}>Extract</Button>
+            <Button onClick={this.props.onTemplateExtract}>Extract</Button>
           </ButtonGroup>
         </Row>
       </Container>
