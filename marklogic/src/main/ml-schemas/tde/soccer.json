@@ -28,22 +28,27 @@
           {
             "name": "id",
             "scalarType": "long",
-            "val": "meta/id"
-          },
-          {
-            "name": "document",
-            "scalarType": "string",
-            "val": "meta/documentLocation"
+            "val": "id"
           },
           {
             "name": "date",
             "scalarType": "date",
-            "val": "fn:concat('20', meta/event/date/year, '-', meta/event/date/month, '-', meta/event/date/day )"
+            "val": "match-date"
           },
           {
             "name": "league",
             "scalarType": "string",
-            "val": "meta/event/competition"
+            "val": "league"
+          },
+          {
+            "name": "homeTeam",
+            "scalarType": "string",
+            "val": "teams/home"
+          },
+          {
+            "name": "awayTeam",
+            "scalarType": "string",
+            "val": "teams/away"
           }
         ]
       }

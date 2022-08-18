@@ -9,5 +9,6 @@
   "rewrite-resolves-globally": false,
   "content-database": "%%DATABASE%%",
   "modules-database": "%%MODULES_DATABASE%%",
-  "default-user": "nobody"
+  "authentication": "application-level",  
+  "default-user": "admin"
 }
