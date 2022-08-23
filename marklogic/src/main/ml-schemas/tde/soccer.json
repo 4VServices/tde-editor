@@ -51,6 +51,22 @@
             "val": "teams/away"
           }
         ]
+      },
+      {
+        "schemaName": "soccer",
+        "viewName": "pointlessSecondView",
+        "columns": [
+          {
+            "name": "total",
+            "scalarType": "long",
+            "val": "score/home + score/away"
+          },
+          {
+            "name": "message",
+            "scalarType": "string",
+            "val": "'Philadelphia Union win MLS Cup!'"
+          }
+        ]
       }
     ],
     "triples": [
