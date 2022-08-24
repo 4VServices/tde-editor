@@ -42,7 +42,8 @@ class Editor extends React.Component {
       msgHeader: '',
       msgBody: '',
       showNotification: false,
-      sampleURIs: []
+      sampleURIs: [],
+      extractedData: null
     };
   }
 
@@ -154,12 +155,16 @@ class Editor extends React.Component {
         (result) => {
           console.log(`extraction call succeeded: ${JSON.stringify(result)}`);
           // TODO: take the results of extraction and display.
+          this.setState({
+            extractedData: result
+          });
         },
         (error) => {
           console.log(`extraction call failed: ${error}`);
           this.setState({
             isLoaded: true,
-            error
+            error,
+            extractedData: null
           });
         }
       );
@@ -292,10 +297,10 @@ class Editor extends React.Component {
             <Variables />
           </Row>
           <Row>
-            <ViewRows rowsSpec={this.state.templateJSON.template.rows} />
+            <ViewRows rowsSpec={this.state.templateJSON.template.rows} extractedData={this.state.extractedData} />
           </Row>
           <Row>
-            <Triples />
+            <Triples rowsSpec={this.state.templateJSON.template.rows} extractedData={this.state.extractedData} />
           </Row>
         </Col>
       </Row>

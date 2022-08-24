@@ -1,0 +1,17 @@
+.extractedRows {
+  margin-bottom: 20px;
+}
+
+.extracted-row-container {
+  padding: 16px;
+  border: 1px solid #000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.bold-text {
+  font-size: 18px;
+  font-weight: bold;
+}
