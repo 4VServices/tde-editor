@@ -11,7 +11,7 @@ const ViewRows = ({ extractedData, rowsSpec, onRowChange }) => {
       <h2>View Rows</h2>
       {rowsSpec && rowsSpec.map((row, index) => <ViewRow viewRow={row} index={index} handleRowChange={onRowChange} />)}
       <Button>Add Row</Button>
-      <ExtractedRows extractedData={extractedData} />
+      <ExtractedRows extractedData={extractedData} rowsSpec={rowsSpec} />
     </Container>
   );
 };
