@@ -9,11 +9,11 @@
       },
       {
         "name": "home-team",
-        "val": "sem:iri($prefix || '/' || fn:replace(teams/home, ' ', '_'))"
+        "val": "sem:iri($prefix || fn:replace(teams/home, ' ', '_'))"
       },
       {
         "name": "away-team",
-        "val": "sem:iri($prefix || '/' || fn:replace(teams/away, ' ', '_'))"
+        "val": "sem:iri($prefix || fn:replace(teams/away, ' ', '_'))"
       },
       {
         "name": "doc-id",
@@ -49,6 +49,22 @@
             "name": "awayTeam",
             "scalarType": "string",
             "val": "teams/away"
+          }
+        ]
+      },
+      {
+        "schemaName": "soccer",
+        "viewName": "pointlessSecondView",
+        "columns": [
+          {
+            "name": "total",
+            "scalarType": "long",
+            "val": "score/home + score/away"
+          },
+          {
+            "name": "message",
+            "scalarType": "string",
+            "val": "'Philadelphia Union win MLS Cup!'"
           }
         ]
       }
