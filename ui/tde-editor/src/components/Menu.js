@@ -21,10 +21,6 @@ class Menu extends React.Component {
     console.log(`handleTemplateSelect: ${JSON.stringify(template)}`);
   }
 
-  handleInsert() {
-    console.log('handleInsert');
-  }
-
   handleExport() {
     console.log('handleExport');
   }
@@ -50,7 +46,7 @@ class Menu extends React.Component {
 
         <Row>
           <ButtonGroup vertical>
-            <Button onClick={this.handleInsert}>Insert</Button>
+            <Button onClick={this.props.onTemplateInsert}>Insert</Button>
             <Button onClick={this.handleExport}>Export</Button>
             <Button onClick={this.props.handleValidate}>Validate</Button>
             <Button onClick={this.props.onTemplateExtract}>Extract</Button>
