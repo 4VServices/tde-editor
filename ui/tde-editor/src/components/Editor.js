@@ -155,7 +155,6 @@ class Editor extends React.Component {
         .then(
           (result) => {
             console.log(`extraction call succeeded: ${JSON.stringify(result)}`);
-            // TODO: take the results of extraction and display.
             this.setState({
               msgHeader: 'Extraction',
               msgBody: 'Extraction succeeded',
