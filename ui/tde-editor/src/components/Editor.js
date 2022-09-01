@@ -31,6 +31,7 @@ class Editor extends React.Component {
     this.handleCollectionChange = this.handleCollectionChange.bind(this);
     this.handleValidate = this.handleValidate.bind(this);
     this.handleTemplateExtract = this.handleTemplateExtract.bind(this);
+    this.handleTemplateInsert = this.handleTemplateInsert.bind(this);
     this.addURI = this.addURI.bind(this);
     this.toggleShowNotification = this.toggleShowNotification.bind(this);
     this.state = {
@@ -180,6 +181,34 @@ class Editor extends React.Component {
     }
   }
 
+  handleTemplateInsert() {
+    let headers = this.buildAuthHeaders();
+    headers.append('Content-Type', 'application/json');
+    fetch(`/api/tde/template/insert?uri=${this.state.selectedTemplateURI}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(this.state.templateJSON)
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log(`insert call succeeded: ${JSON.stringify(result)}`);
+          this.setState({
+            msgHeader: 'Insert',
+            msgBody: 'Insert succeeded',
+            showNotification: true
+          });
+        },
+        (error) => {
+          console.log(`insert call failed: ${error}`);
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      );
+  }
+
   getTemplates(dbName) {
     fetch(`/api/tde/templates?contentDB=${dbName}`, {
       method: 'GET',
@@ -271,6 +300,7 @@ class Editor extends React.Component {
             templates={this.state.templates}
             onTemplateSelected={this.handleTemplateChange}
             onTemplateExtract={this.handleTemplateExtract}
+            onTemplateInsert={this.handleTemplateInsert}
             selectedTemplateURI={this.state.selectedTemplateURI}
             handleValidate={this.handleValidate}
           ></Menu>
