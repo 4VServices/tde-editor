@@ -141,33 +141,44 @@ class Editor extends React.Component {
   }
 
   handleTemplateExtract() {
-    console.log('Editor.js; handleTemplateExtract');
-    let headers = this.buildAuthHeaders();
-    headers.append('Content-Type', 'application/json');
-    let uriParam = this.state.sampleURIs.map((uri) => `uri=${uri}`).join('&');
-    fetch(`/api/tde/template/extract?${uriParam}&contentDB=${this.state.selectedContentDb}`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(this.state.templateJSON)
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(`extraction call succeeded: ${JSON.stringify(result)}`);
-          // TODO: take the results of extraction and display.
-          this.setState({
-            extractedData: result
-          });
-        },
-        (error) => {
-          console.log(`extraction call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error,
-            extractedData: null
-          });
-        }
-      );
+    if (this.state.sampleURIs.length > 0) {
+      console.log('Editor.js; handleTemplateExtract');
+      let headers = this.buildAuthHeaders();
+      headers.append('Content-Type', 'application/json');
+      let uriParam = this.state.sampleURIs.map((uri) => `uri=${uri}`).join('&');
+      fetch(`/api/tde/template/extract?${uriParam}&contentDB=${this.state.selectedContentDb}`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(this.state.templateJSON)
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            console.log(`extraction call succeeded: ${JSON.stringify(result)}`);
+            // TODO: take the results of extraction and display.
+            this.setState({
+              msgHeader: 'Extraction',
+              msgBody: 'Extraction succeeded',
+              showNotification: true,
+              extractedData: result
+            });
+          },
+          (error) => {
+            console.log(`extraction call failed: ${error}`);
+            this.setState({
+              isLoaded: true,
+              error,
+              extractedData: null
+            });
+          }
+        );
+    } else {
+      this.setState({
+        msgHeader: 'Extraction',
+        msgBody: 'Add the URI of at least one sample document before running extract',
+        showNotification: true
+      });
+    }
   }
 
   getTemplates(dbName) {
