@@ -7,6 +7,11 @@ import Col from 'react-bootstrap/Col';
 
 import Editor from './components/Editor';
 
+import './style.css';
+import axios from "axios"
+
+axios.defaults.headers["Access-Control-Allow-Origin"] = "*"
+
 function App() {
   return (
     <div className="App">

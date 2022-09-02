@@ -3,7 +3,7 @@ import './ExtractedRows.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
-
+import axios from 'axios';
 import Menu from './Menu.js';
 import Template from './Template.js';
 import SampleDocs from './SampleDocs.js';
@@ -56,6 +56,7 @@ class Editor extends React.Component {
     let base64 = require('base-64');
     let headers = new Headers();
     headers.append('Authorization', 'Basic ' + base64.encode('admin:admin'));
+    headers.append('access-control-allow-origin', '*');
     return headers;
   }
 
@@ -108,7 +109,7 @@ class Editor extends React.Component {
   handleValidate() {
     let headers = this.buildAuthHeaders();
     headers.append('Content-Type', 'application/json');
-    fetch(`/api/tde/template/validate`, {
+    fetch(`${process.env.REACT_APP_API_URL || ''}/tde/template/validate`, {
       method: 'POST',
       headers,
       body: JSON.stringify(this.state.templateJSON)
@@ -147,11 +148,16 @@ class Editor extends React.Component {
       let headers = this.buildAuthHeaders();
       headers.append('Content-Type', 'application/json');
       let uriParam = this.state.sampleURIs.map((uri) => `uri=${uri}`).join('&');
-      fetch(`/api/tde/template/extract?${uriParam}&contentDB=${this.state.selectedContentDb}`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(this.state.templateJSON)
-      })
+      fetch(
+        `${process.env.REACT_APP_API_URL || ''}/tde/template/extract?${uriParam}&contentDB=${
+          this.state.selectedContentDb
+        }`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(this.state.templateJSON)
+        }
+      )
         .then((res) => res.json())
         .then(
           (result) => {
@@ -184,7 +190,7 @@ class Editor extends React.Component {
   handleTemplateInsert() {
     let headers = this.buildAuthHeaders();
     headers.append('Content-Type', 'application/json');
-    fetch(`/api/tde/template/insert?uri=${this.state.selectedTemplateURI}`, {
+    fetch(`${process.env.REACT_APP_API_URL || ''}/tde/template/insert?uri=${this.state.selectedTemplateURI}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(this.state.templateJSON)
@@ -210,7 +216,7 @@ class Editor extends React.Component {
   }
 
   getTemplates(dbName) {
-    fetch(`/api/tde/templates?contentDB=${dbName}`, {
+    fetch(`${process.env.REACT_APP_API_URL || ''}/tde/templates?contentDB=${dbName}`, {
       method: 'GET',
       headers: this.buildAuthHeaders()
     })
@@ -237,7 +243,7 @@ class Editor extends React.Component {
   }
 
   getTemplate(dbName, templateURI) {
-    fetch(`/api/tde/template/get?contentDB=${dbName}&templateURI=${templateURI}`, {
+    fetch(`${process.env.REACT_APP_API_URL || ''}/tde/template/get?contentDB=${dbName}&templateURI=${templateURI}`, {
       method: 'GET',
       headers: this.buildAuthHeaders()
     })
@@ -264,29 +270,35 @@ class Editor extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/databases', {
+    axios.request({
       method: 'GET',
-      headers: this.buildAuthHeaders()
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            contentDBs: result
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log(`databases call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
+      headers: this.buildAuthHeaders(),
+      url: `${process.env.REACT_APP_API_URL || ''}/databases`
+    });
+
+    // fetch(`${process.env.REACT_APP_API_URL || ''}/databases`, {
+    //   method: 'GET',
+    //   headers: this.buildAuthHeaders()
+    // })
+    //   .then((res) => res.json())
+    //   .then(
+    //     (result) => {
+    //       this.setState({
+    //         isLoaded: true,
+    //         contentDBs: result
+    //       });
+    //     },
+    //     // Note: it's important to handle errors here
+    //     // instead of a catch() block so that we don't swallow
+    //     // exceptions from actual bugs in components.
+    //     (error) => {
+    //       console.log(`databases call failed: ${error}`);
+    //       this.setState({
+    //         isLoaded: true,
+    //         error
+    //       });
+    //     }
+    //   );
   }
 
   render() {

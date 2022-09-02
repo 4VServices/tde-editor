@@ -1,0 +1,73 @@
+@import "~antd/dist/antd.css";
+
+html {
+  font-size: 16px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 100%;
+  background: #f7f8fa !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
+.container {
+  /* max-width: 140rem; */
+  margin: 0 auto;
+}
+
+.ant-typography {
+  margin: 0 !important;
+}
+
+.ant-layout-sider {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+}
+.ant-layout-sider-trigger {
+  background-color: #dcdcdc;
+  color: #001529;
+}
+.ant-btn-link {
+  padding: 4px 0;
+}
+
+.ant-tabs-content-holder {
+  overflow-x: auto;
+}
+
+.ant-btn-link {
+  padding: 4px 0 !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #F7F8FA !important;
+}
+
+/* Scroll bar styling */
+::-webkit-scrollbar {
+  width: 0.8rem;
+  position: absolute;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 0 4px 4px 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 99px;
+  cursor: pointer;
+  user-select: none;
+}

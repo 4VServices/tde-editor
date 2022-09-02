@@ -27,7 +27,7 @@ class SampleDocs extends React.Component {
 
   viewDoc(uri) {
     console.log('SampleDocs; viewDoc');
-    fetch(`/api/document?contentDB=${this.props.contentDB}&uri=${uri}`, {
+    fetch(`${process.env.REACT_APP_API_URL || ''}/document?contentDB=${this.props.contentDB}&uri=${uri}`, {
       method: 'GET',
       headers: this.props.authHeaders
     })
