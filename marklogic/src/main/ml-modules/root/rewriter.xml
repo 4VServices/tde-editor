@@ -1,4 +1,7 @@
 <rewriter xmlns="http://marklogic.com/xdmp/rewriter">
+  <match-method any-of="OPTIONS">
+    <dispatch>/api/options.sjs</dispatch>
+  </match-method>
   <match-path matches="^(/api/.*)">
     <dispatch>$1.sjs</dispatch>
   </match-path>
