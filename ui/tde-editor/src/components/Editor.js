@@ -12,6 +12,7 @@ import Triples from './Triples.js';
 import { getDatabases } from '../apis/databases';
 import { buildAuthHeaders } from '../apis/buildAuthHeader';
 import { getTemplate, getTemplates, templateExtract, templateInsert, templateValidate } from '../apis/templates';
+import { FlexBox } from './Box';
 
 function defaultTemplate() {
   return {
@@ -167,8 +168,8 @@ const Editor = (props) => {
   }, []);
 
   return (
-    <Row>
-      <Col md="auto">
+    <FlexBox width="100%" alignItems="flex-start" marginTop="2rem">
+      <div className='left'>
         <Menu
           contentDBs={contentDBs}
           onContentDbSelected={handleContentDbChange}
@@ -186,8 +187,8 @@ const Editor = (props) => {
           </Toast.Header>
           <Toast.Body>{msgBody}</Toast.Body>
         </Toast>
-      </Col>
-      <Col>
+      </div>
+      <div className='right'>
         <Row>
           <Template
             templateURI={selectedTemplateURI}
@@ -218,8 +219,8 @@ const Editor = (props) => {
         <Row>
           <Triples rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
         </Row>
-      </Col>
-    </Row>
+      </div>
+    </FlexBox>
   );
 };
 
