@@ -4,7 +4,7 @@ import { Label } from "components/common";
 import styled from "styled-components";
 
 const Root = styled.div`
-  width: ${props => (props.fullWidth ? "100%" : "auto")};
+  width: ${props => (props.fullwidth ? "100%" : "auto")};
 `;
 
 export const Select = ({
@@ -15,7 +15,7 @@ export const Select = ({
   width,
   label,
   required,
-  fullWidth,
+  fullwidth,
   mode,
   showSearch,
   onSearch,
@@ -40,7 +40,7 @@ export const Select = ({
   }, [hasEmpty, optionsProps]);
 
   return (
-    <Root fullWidth={fullWidth} style={rootStyle}>
+    <Root fullwidth={fullwidth} style={rootStyle}>
       {label && <Label required={required}>{label}</Label>}
       <AntdSelect
         showSearch={showSearch}
@@ -52,7 +52,7 @@ export const Select = ({
         filterOption={filterOption}
         disabled={disabled}
         {...restProps}
-        style={{ width: width || fullWidth ? "100%" : "15rem" }}
+        style={{ width: width || fullwidth ? "100%" : "15rem" }}
         dropdownMatchSelectWidth={dropdownMatchSelectWidth}
       >
         {options.map((option, index) => {

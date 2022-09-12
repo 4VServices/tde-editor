@@ -1,15 +1,9 @@
-import logo from './logo.png';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
 import Editor from './components/Editor';
-
-import './style.css';
 import styled from 'styled-components';
-import { Box, FlexBox } from './components/Box';
-import { H1, H2, H3 } from './components/common';
+import { FlexBox } from './components/Box';
+import { H1, H3 } from './components/common';
+import logo from './logo.png';
+import './style.css';
 
 const Container = styled.div`
   max-width: 1280px;
@@ -24,14 +18,19 @@ const Container = styled.div`
   }
 `;
 
+const Img = styled.img`
+  height: 10vmin;
+  pointer-events: none;
+`;
+
 function App() {
   return (
     <div className="App">
       <Container>
-        <FlexBox width="100%">
+        <FlexBox width="100%" gap="4rem" margin="2rem 0">
           <div className="left">
             <FlexBox justifyContent="space-between">
-              <img src={logo} className="App-logo" alt="logo" />
+              <Img src={logo} className="App-logo" alt="logo" />
             </FlexBox>
           </div>
           <div className="right">

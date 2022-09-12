@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './ExtractedRows.css';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Toast from 'react-bootstrap/Toast';
 import Menu from './Menu.js';
 import Template from './Template.js';
 import SampleDocs from './SampleDocs.js';
@@ -13,6 +9,7 @@ import { getDatabases } from '../apis/databases';
 import { buildAuthHeaders } from '../apis/buildAuthHeader';
 import { getTemplate, getTemplates, templateExtract, templateInsert, templateValidate } from '../apis/templates';
 import { FlexBox } from './Box';
+import { notification } from 'antd';
 
 function defaultTemplate() {
   return {
@@ -29,17 +26,10 @@ const Editor = (props) => {
   const [templates, setTemplates] = useState([]);
   const [selectedTemplateURI, setSelectedTemplateURI] = useState('');
   const [templateJSON, setTemplateJSON] = useState(defaultTemplate());
-  const [msgHeader, setMsgHeader] = useState('');
-  const [msgBody, setMsgBody] = useState('');
-  const [showNotification, setShowNotification] = useState(false);
   const [sampleURIs, setSampleURIs] = useState([]);
   const [extractedData, setExtractedData] = useState(null);
   const [isLoaded, setLoaded] = useState(false);
   const [error, setError] = useState();
-
-  const toggleShowNotification = () => {
-    setShowNotification((notification) => !notification);
-  };
 
   const handleContentDbChange = async (dbName) => {
     setSelectedContentDb(dbName);
@@ -106,10 +96,16 @@ const Editor = (props) => {
       let body = `This template ${result.valid ? 'is' : 'is not'} valid`;
       if (!result.valid) {
         body += '\n' + result.message;
+        notification.error({
+          message: 'Validation',
+          description: body
+        });
+      } else {
+        notification.success({
+          message: 'Validation',
+          description: body
+        });
       }
-      setMsgHeader('Validation');
-      setMsgBody(body);
-      setShowNotification(true);
     } catch (error) {
       console.log(`validation call failed: ${error}`);
       setLoaded(true);
@@ -123,10 +119,12 @@ const Editor = (props) => {
       let uriParam = sampleURIs.map((uri) => `uri=${uri}`).join('&');
       try {
         const result = await templateExtract(uriParam, selectedContentDb, templateJSON);
-        setMsgHeader('Extraction');
-        setMsgBody('Extraction succeeded');
-        setShowNotification(true);
         setExtractedData(result);
+
+        notification.success({
+          message: 'Extraction',
+          description: 'Extraction succeeded'
+        });
       } catch (error) {
         console.log(`extraction call failed: ${error}`);
         setLoaded(true);
@@ -134,18 +132,20 @@ const Editor = (props) => {
         setExtractedData(null);
       }
     } else {
-      setMsgHeader('Extraction');
-      setMsgBody('Add the URI of at least one sample document before running extract');
-      setShowNotification(true);
+      notification.warn({
+        message: 'Extraction',
+        description: 'Add the URI of at least one sample document before running extract'
+      });
     }
   };
 
   const handleTemplateInsert = async () => {
     try {
       const result = await templateInsert(selectedTemplateURI, templateJSON);
-      setMsgHeader('Insert');
-      setMsgBody('Insert succeeded');
-      setShowNotification(true);
+      notification.success({
+        message: 'Insert',
+        description: 'Insert succeeded'
+      });
     } catch (error) {
       console.log(`insert call failed: ${error}`);
       setLoaded(true);
@@ -168,8 +168,8 @@ const Editor = (props) => {
   }, []);
 
   return (
-    <FlexBox width="100%" alignItems="flex-start" marginTop="2rem">
-      <div className='left'>
+    <FlexBox width="100%" alignItems="flex-start" margin="2rem 0" gap="4rem">
+      <div className="left">
         <Menu
           contentDBs={contentDBs}
           onContentDbSelected={handleContentDbChange}
@@ -181,15 +181,9 @@ const Editor = (props) => {
           selectedTemplateURI={selectedTemplateURI}
           handleValidate={handleValidate}
         ></Menu>
-        <Toast show={showNotification} onClose={toggleShowNotification}>
-          <Toast.Header>
-            <strong className="me-auto">{msgHeader}</strong>
-          </Toast.Header>
-          <Toast.Body>{msgBody}</Toast.Body>
-        </Toast>
       </div>
-      <div className='right'>
-        <Row>
+      <div className="right">
+        <FlexBox alignItems="stretch" flexDirection="column" gap="2rem">
           <Template
             templateURI={selectedTemplateURI}
             context={templateJSON.template.context}
@@ -201,24 +195,16 @@ const Editor = (props) => {
             handleCollectionChange={handleCollectionChange}
             handleRowChange={handleRowChange}
           />
-        </Row>
-        <Row>
           <SampleDocs
             uris={sampleURIs}
             addURI={addURI}
             authHeaders={buildAuthHeaders()}
             contentDB={selectedContentDb}
           />
-        </Row>
-        <Row>
           <Variables />
-        </Row>
-        <Row>
           <ViewRows rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
-        </Row>
-        <Row>
           <Triples rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
-        </Row>
+        </FlexBox>
       </div>
     </FlexBox>
   );

@@ -3,10 +3,10 @@ import { Button as AntdButton } from 'antd';
 import styled from 'styled-components';
 
 const Root = styled(AntdButton)`
-  width: ${(props) => props.fullWidth && '100%'};
+  width: ${(props) => props.fullwidth && '100%'};
 `;
 
-export const Button = ({ type, icon, onClick, loading: loadingProp, showLoading, fullWidth, ...restProps }) => {
+export const Button = ({ type, icon, onClick, loading: loadingProp, showLoading, fullwidth, ...restProps }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = useCallback(
@@ -33,7 +33,7 @@ export const Button = ({ type, icon, onClick, loading: loadingProp, showLoading,
       icon={icon}
       loading={loadingProp || loading}
       onClick={handleClick}
-      fullWidth={fullWidth}
+      fullwidth={fullwidth}
       {...restProps}
     />
   );

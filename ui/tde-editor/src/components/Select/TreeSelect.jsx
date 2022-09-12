@@ -4,21 +4,21 @@ import { Label } from "components/common";
 import styled from "styled-components";
 
 const Root = styled.div`
-  width: ${props => (props.fullWidth ? "100%" : "auto")};
+  width: ${props => (props.fullwidth ? "100%" : "auto")};
 `;
 
 export const TreeSelect = ({
   value,
   label,
   required,
-  fullWidth,
+  fullwidth,
   rootStyle,
   treeData,
   treeDefaultExpandAll,
   ...restProps
 }) => {
   return (
-    <Root fullWidth={fullWidth} style={rootStyle}>
+    <Root fullwidth={fullwidth} style={rootStyle}>
       {label && <Label required={required}>{label}</Label>}
       <AntdTreeSelect
         style={{ width: "100%" }}

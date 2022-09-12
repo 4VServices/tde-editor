@@ -1,41 +1,17 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import './ViewRow.css';
+import { FlexBox } from './Box';
+import { Group } from './Group';
+import { TextEdit } from './TextEdit';
 
 const ViewRow = ({ viewRow, index, handleRowChange }) => {
   console.log('zz', viewRow);
   return (
-    <Container className="viewRow">
-      <Form as={Row}>
-        <Form.Group className="mb-3" controlId="template.uri">
-          <Form.Label column md="1">
-            Schema
-          </Form.Label>
-          <Col md="5">
-            <Form.Control
-              type="text"
-              value={viewRow.schemaName}
-              onChange={(event) => handleRowChange(index, 'schemaName', event.target.value)}
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="template.uri">
-          <Form.Label column md="1">
-            View
-          </Form.Label>
-          <Col md="5">
-            <Form.Control
-              type="text"
-              placeholder={viewRow.viewName}
-              onChange={(event) => handleRowChange(index, 'viewName', event.target.value)}
-            />
-          </Col>
-        </Form.Group>
-      </Form>
-    </Container>
+    <Group title={''}>
+      <FlexBox flexDirection="column" alignItems="stretch" gap="1rem">
+        <TextEdit label="Schema" value={viewRow.schemaName} onChange={(v) => handleRowChange(index, 'schemaName', v)} />
+        <TextEdit label="View" placeholder={viewRow.viewName} onChange={(v) => handleRowChange(index, 'viewName', v)} />
+      </FlexBox>
+    </Group>
   );
 };
 
