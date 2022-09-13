@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Menu from './Menu.js';
 import Template from './Template.js';
 import SampleDocs from './SampleDocs.js';
@@ -79,14 +79,32 @@ const Editor = (props) => {
     setTemplateJSON(template);
   };
 
-  const handleRowChange = (changedIndex, property, value) => {
+  const handleRowChange = (rowIndex, changedRow) => {
     let template = templateJSON;
-    template.template.rows.map((row, index) => {
-      if (index === changedIndex) {
-        row[property] = value;
+    template.template.rows = template.template.rows.map((row, index) => {
+      if (index === rowIndex) {
+        return changedRow;
       }
       return row;
     });
+    setTemplateJSON({ ...template });
+  };
+
+  const handleRowDelete = (rowIndex) => {
+    const confirm = window.confirm('Are you sure you want to delete?');
+    if (confirm) {
+      let template = templateJSON;
+      template.template.rows = template.template.rows.filter((row, index) => {
+        return index !== rowIndex;
+      });
+      setTemplateJSON({ ...template });
+    }
+  };
+
+  const handleAddRow = () => {
+    let template = templateJSON;
+    template.template.rows = [...template.template.rows, {}];
+    setTemplateJSON({ ...template });
   };
 
   const handleValidate = async () => {
@@ -202,7 +220,13 @@ const Editor = (props) => {
             contentDB={selectedContentDb}
           />
           <Variables />
-          <ViewRows rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
+          <ViewRows
+            rowsSpec={templateJSON.template.rows}
+            extractedData={extractedData}
+            onRowChange={handleRowChange}
+            onRowDelete={handleRowDelete}
+            onAddRow={handleAddRow}
+          />
           <Triples rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
         </FlexBox>
       </div>
