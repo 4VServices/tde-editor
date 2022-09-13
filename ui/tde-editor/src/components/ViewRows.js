@@ -1,18 +1,22 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import './ViewRows.css';
 import ViewRow from './ViewRow';
 import ExtractedRows from './ExtractedRows';
+import { Group } from './Group';
+import { Button } from './Button';
+import { FlexBox } from './Box';
 
 const ViewRows = ({ extractedData, rowsSpec, onRowChange }) => {
   return (
-    <Container className="viewRows">
-      <h2>View Rows</h2>
-      {rowsSpec && rowsSpec.map((row, index) => <ViewRow viewRow={row} index={index} handleRowChange={onRowChange} />)}
-      <Button>Add Row</Button>
+    <Group title="View Rows">
+      {rowsSpec &&
+        rowsSpec.map((row, index) => <ViewRow viewRow={row} key={index} index={index} handleRowChange={onRowChange} />)}
+      <FlexBox gap="1rem" margin="1rem 0 3rem">
+        <Button>Add View</Button>
+        <Button>Add column</Button>
+      </FlexBox>
+
       <ExtractedRows extractedData={extractedData} rowsSpec={rowsSpec} />
-    </Container>
+    </Group>
   );
 };
 

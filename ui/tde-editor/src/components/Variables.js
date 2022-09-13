@@ -1,18 +1,13 @@
 import React from 'react';
-import './Variables.css';
-import Variable from './Variable.js';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
+import { Group } from './Group';
+import { Button } from './Button';
 
-class Variables extends React.Component {
-  render() {
-    return (
-      <Container className="variables">
-        <h2>Variables</h2>
-        <Button size="sm">Add Variable</Button>
-      </Container>
-    );
-  }
-}
+const Variables = () => {
+  return (
+    <Group title="Variables">
+      <Button>Add Variable</Button>
+    </Group>
+  );
+};
 
 export default Variables;

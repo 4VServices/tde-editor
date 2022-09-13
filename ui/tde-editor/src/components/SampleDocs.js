@@ -1,106 +1,64 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/esm/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/esm/Form';
-import './SampleDocs.css';
+import React, { useState } from 'react';
+import { Group } from './Group';
+import { FlexBox } from './Box';
+import { TextEdit } from './TextEdit';
+import { Button } from './Button';
 
-class SampleDocs extends React.Component {
-  constructor(props) {
-    super(props);
-    this.viewDoc = this.viewDoc.bind(this);
-    this.state = {
-      currentURI: '',
-      currentViewedDoc: ''
-    };
-  }
+const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
+  const [currentURI, setCurrentURI] = useState('');
+  const [currentViewedDoc, setCurrentViewedDoc] = useState('');
 
-  handleURIChange(uri) {
-    this.setState({ currentURI: uri });
-  }
+  const handleURIChange = (uri) => {
+    setCurrentURI(uri);
+  };
 
-  addURI(uri) {
-    this.props.addURI(this.state.currentURI);
-    this.setState({ currentURI: '' });
-  }
+  const handleAddURI = () => {
+    addURI(currentURI);
+    setCurrentURI('');
+  };
 
-  viewDoc(uri) {
+  const viewDoc = (uri) => {
     console.log('SampleDocs; viewDoc');
-    fetch(`/api/document?contentDB=${this.props.contentDB}&uri=${uri}`, {
+    fetch(`${process.env.REACT_APP_API_URL || ''}/document?contentDB=${contentDB}&uri=${uri}`, {
       method: 'GET',
-      headers: this.props.authHeaders
+      headers: authHeaders
     })
       .then((res) => res.json())
       .then(
         (result) => {
           console.log('/api/document call succeeded');
           // TODO: handle XML content
-          this.setState({
-            currentViewedDoc: JSON.stringify(result)
-          });
+          setCurrentViewedDoc(JSON.stringify(result));
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components.
         (error) => {
           console.log(`templates call failed: ${error}`);
-          this.setState({
-            currentViewedDoc: `Unable to load ${uri}`
-          });
+          setCurrentViewedDoc(`Unable to load ${uri}`);
         }
       );
-  }
+  };
 
-  render() {
-    return (
-      <Container className="sampleDocs">
-        <h2>Sample Documents</h2>
-        <Form>
-          <Form.Group as={Row} className="mb-3" controlId="template.uri">
-            <Form.Label column md="2">
-              URI
-            </Form.Label>
-            <Col md="7">
-              <Form.Control
-                type="text"
-                value={this.state.currentURI}
-                onChange={(event) => this.handleURIChange(event.target.value)}
-              />
-            </Col>
-            <Col md="2">
-              <Button className="add" size="sm" onClick={(e) => this.addURI()}>
-                Add
-              </Button>
-            </Col>
-          </Form.Group>
-          {this.props.uris.map((uri) => (
-            <Form.Group as={Row} className="mb-3" controlId="template.uri" enabled="false">
-              <Form.Label column md="2">
-                URI
-              </Form.Label>
-              <Col md="7">
-                <Form.Control type="text" value={uri} />
-              </Col>
-              <Col md="1">
-                <Button size="sm" onClick={() => this.viewDoc(uri)}>
-                  View
-                </Button>
-              </Col>
-              <Col md="1">
-                <Button size="sm">Remove</Button>
-              </Col>
-            </Form.Group>
-          ))}
-          <Form.Group as={Row} className="mb-3" controlId="template.uri">
-            <Col md="10">
-              <Form.Control as="textarea" rows={5} value={this.state.currentViewedDoc} />
-            </Col>
-          </Form.Group>
-        </Form>
-      </Container>
-    );
-  }
-}
+  return (
+    <Group title="Sample Documents">
+      <FlexBox flexDirection="column" gap="1rem" alignItems="stretch">
+        <FlexBox alignItems="flex-end" gap="1rem">
+          <TextEdit label="URI" value={currentURI} onChange={handleURIChange} rootStyle={{ flexGrow: 1 }} />
+          <Button onClick={(e) => handleAddURI()}>Add</Button>
+        </FlexBox>
+        {uris.map((uri) => (
+          <FlexBox key={uri} gap="1rem" alignItems="flex-end">
+            <TextEdit label="URI" value={uri} onChange={() => {}} rootStyle={{ flexGrow: 1 }} />
+            <Button onClick={(e) => viewDoc(uri)}>View</Button>
+            <Button danger>Remove</Button>
+          </FlexBox>
+        ))}
+
+        <TextEdit type={'textarea'} rows={5} value={currentViewedDoc} />
+      </FlexBox>
+    </Group>
+  );
+};
 
 export default SampleDocs;

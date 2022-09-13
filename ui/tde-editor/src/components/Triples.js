@@ -1,16 +1,17 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/esm/Container';
-import './Triples.css';
+import { Box } from './Box';
+import { Button } from './Button';
 import ExtractedTriples from './ExtractedTriples';
+import { Group } from './Group';
 
 const Triples = ({ rowsSpec, extractedData }) => {
   return (
-    <Container className="triples">
-      <h2>Triples</h2>
-      <Button>Add Triple</Button>
-      <ExtractedTriples extractedData={extractedData} />
-    </Container>
+    <Group title="Triples">
+      <Button type="primary">Add Triple</Button>
+      <Box marginTop="2rem">
+        <ExtractedTriples extractedData={extractedData} />
+      </Box>
+    </Group>
   );
 };
 

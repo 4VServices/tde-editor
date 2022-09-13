@@ -1,5 +1,4 @@
 import React from 'react';
-import './Variable.css';
 
 class Variable extends React.Component {
   render() {

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import './ExtractedRows.css';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Toast from 'react-bootstrap/Toast';
-
+import React, { useEffect, useState } from 'react';
 import Menu from './Menu.js';
 import Template from './Template.js';
 import SampleDocs from './SampleDocs.js';
 import Variables from './Variables.js';
 import ViewRows from './ViewRows.js';
 import Triples from './Triples.js';
+import { getDatabases } from '../apis/databases';
+import { buildAuthHeaders } from '../apis/buildAuthHeader';
+import { getTemplate, getTemplates, templateExtract, templateInsert, templateValidate } from '../apis/templates';
+import { FlexBox } from './Box';
+import { notification } from 'antd';
 
 function defaultTemplate() {
   return {
@@ -20,332 +20,194 @@ function defaultTemplate() {
   };
 }
 
-class Editor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleContentDbChange = this.handleContentDbChange.bind(this);
-    this.handleTemplateChange = this.handleTemplateChange.bind(this);
-    this.handleURIChange = this.handleURIChange.bind(this);
-    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
-    this.handleContextChange = this.handleContextChange.bind(this);
-    this.handleCollectionChange = this.handleCollectionChange.bind(this);
-    this.handleValidate = this.handleValidate.bind(this);
-    this.handleTemplateExtract = this.handleTemplateExtract.bind(this);
-    this.handleTemplateInsert = this.handleTemplateInsert.bind(this);
-    this.addURI = this.addURI.bind(this);
-    this.toggleShowNotification = this.toggleShowNotification.bind(this);
-    this.state = {
-      contentDBs: [],
-      selectedContentDb: 'select',
-      templates: [],
-      selectedTemplateURI: '',
-      templateJSON: defaultTemplate(),
-      msgHeader: '',
-      msgBody: '',
-      showNotification: false,
-      sampleURIs: [],
-      extractedData: null
-    };
-  }
+const Editor = (props) => {
+  const [contentDBs, setContentDBs] = useState([]);
+  const [selectedContentDb, setSelectedContentDb] = useState('select');
+  const [templates, setTemplates] = useState([]);
+  const [selectedTemplateURI, setSelectedTemplateURI] = useState('');
+  const [templateJSON, setTemplateJSON] = useState(defaultTemplate());
+  const [sampleURIs, setSampleURIs] = useState([]);
+  const [extractedData, setExtractedData] = useState(null);
+  const [isLoaded, setLoaded] = useState(false);
+  const [error, setError] = useState();
 
-  toggleShowNotification() {
-    this.setState({ showNotification: !this.state.showNotification });
-  }
+  const handleContentDbChange = async (dbName) => {
+    setSelectedContentDb(dbName);
+    const data = await getTemplates(dbName).catch((error) => {
+      console.log(`templates call failed: ${error}`);
+      setLoaded(true);
+      setError(error);
+    });
+    setLoaded(true);
+    setTemplates(data.templates);
+  };
 
-  buildAuthHeaders() {
-    let base64 = require('base-64');
-    let headers = new Headers();
-    headers.append('Authorization', 'Basic ' + base64.encode('admin:admin'));
-    return headers;
-  }
+  const handleTemplateChange = async (templateURI) => {
+    setSelectedTemplateURI(templateURI);
+    const data = await getTemplate(selectedContentDb, templateURI).catch((error) => {
+      console.log(`templates call failed: ${error}`);
+      setLoaded(true);
+      setError(error);
+    });
+    setLoaded(true);
+    setTemplateJSON(data);
+  };
 
-  handleContentDbChange(dbName) {
-    this.setState({ selectedContentDb: dbName });
-    this.getTemplates(dbName);
-  }
+  const handleURIChange = (templateURI) => {
+    setSelectedTemplateURI(templateURI);
+  };
 
-  handleTemplateChange(templateURI) {
-    this.setState({ selectedTemplateURI: templateURI });
-    this.getTemplate(this.state.selectedContentDb, templateURI);
-  }
+  const addURI = (contentURI) => {
+    setSampleURIs(sampleURIs.concat(contentURI));
+  };
 
-  handleURIChange(templateURI) {
-    this.setState({ selectedTemplateURI: templateURI });
-  }
-
-  addURI(contentURI) {
-    this.setState({ sampleURIs: this.state.sampleURIs.concat(contentURI) });
-  }
-
-  handleDescriptionChange(description) {
-    let template = this.state.templateJSON;
+  const handleDescriptionChange = (description) => {
+    let template = templateJSON;
     template.template.description = description;
-    this.setState({ templateJSON: template });
-  }
+    setTemplateJSON(template);
+  };
 
-  handleContextChange(context) {
-    let template = this.state.templateJSON;
+  const handleContextChange = (context) => {
+    let template = templateJSON;
     template.template.context = context;
-    this.setState({ templateJSON: template });
-  }
+    setTemplateJSON(template);
+  };
 
-  handleCollectionChange(collection) {
-    let template = this.state.templateJSON;
+  const handleCollectionChange = (collection) => {
+    let template = templateJSON;
     template.template.collections = [collection];
-    this.setState({ templateJSON: template });
-  }
+    setTemplateJSON(template);
+  };
 
-  handleRowChange(changedIndex, property, value) {
-    let template = this.state.templateJSON;
+  const handleRowChange = (changedIndex, property, value) => {
+    let template = templateJSON;
     template.template.rows.map((row, index) => {
       if (index === changedIndex) {
         row[property] = value;
       }
       return row;
     });
-  }
+  };
 
-  handleValidate() {
-    let headers = this.buildAuthHeaders();
-    headers.append('Content-Type', 'application/json');
-    fetch(`/api/tde/template/validate`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(this.state.templateJSON)
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(`validation call succeeded: ${JSON.stringify(result)}`);
-          console.log(`This template ${result.valid ? 'is' : 'is not'} valid`);
-          let body = `This template ${result.valid ? 'is' : 'is not'} valid`;
-          if (!result.valid) {
-            body += '\n' + result.message;
-          }
-          this.setState({
-            msgHeader: 'Validation',
-            msgBody: body,
-            showNotification: true
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log(`validation call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-  }
+  const handleValidate = async () => {
+    try {
+      const result = await templateValidate(templateJSON);
+      console.log(`This template ${result.valid ? 'is' : 'is not'} valid`);
+      let body = `This template ${result.valid ? 'is' : 'is not'} valid`;
+      if (!result.valid) {
+        body += '\n' + result.message;
+        notification.error({
+          message: 'Validation',
+          description: body
+        });
+      } else {
+        notification.success({
+          message: 'Validation',
+          description: body
+        });
+      }
+    } catch (error) {
+      console.log(`validation call failed: ${error}`);
+      setLoaded(true);
+      setError(error);
+    }
+  };
 
-  handleTemplateExtract() {
-    if (this.state.sampleURIs.length > 0) {
+  const handleTemplateExtract = async () => {
+    if (sampleURIs.length > 0) {
       console.log('Editor.js; handleTemplateExtract');
-      let headers = this.buildAuthHeaders();
-      headers.append('Content-Type', 'application/json');
-      let uriParam = this.state.sampleURIs.map((uri) => `uri=${uri}`).join('&');
-      fetch(`/api/tde/template/extract?${uriParam}&contentDB=${this.state.selectedContentDb}`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(this.state.templateJSON)
-      })
-        .then((res) => res.json())
-        .then(
-          (result) => {
-            console.log(`extraction call succeeded: ${JSON.stringify(result)}`);
-            this.setState({
-              msgHeader: 'Extraction',
-              msgBody: 'Extraction succeeded',
-              showNotification: true,
-              extractedData: result
-            });
-          },
-          (error) => {
-            console.log(`extraction call failed: ${error}`);
-            this.setState({
-              isLoaded: true,
-              error,
-              extractedData: null
-            });
-          }
-        );
+      let uriParam = sampleURIs.map((uri) => `uri=${uri}`).join('&');
+      try {
+        const result = await templateExtract(uriParam, selectedContentDb, templateJSON);
+        setExtractedData(result);
+
+        notification.success({
+          message: 'Extraction',
+          description: 'Extraction succeeded'
+        });
+      } catch (error) {
+        console.log(`extraction call failed: ${error}`);
+        setLoaded(true);
+        setError(error);
+        setExtractedData(null);
+      }
     } else {
-      this.setState({
-        msgHeader: 'Extraction',
-        msgBody: 'Add the URI of at least one sample document before running extract',
-        showNotification: true
+      notification.warn({
+        message: 'Extraction',
+        description: 'Add the URI of at least one sample document before running extract'
       });
     }
-  }
+  };
 
-  handleTemplateInsert() {
-    let headers = this.buildAuthHeaders();
-    headers.append('Content-Type', 'application/json');
-    fetch(`/api/tde/template/insert?uri=${this.state.selectedTemplateURI}`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(this.state.templateJSON)
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(`insert call succeeded: ${JSON.stringify(result)}`);
-          this.setState({
-            msgHeader: 'Insert',
-            msgBody: 'Insert succeeded',
-            showNotification: true
-          });
-        },
-        (error) => {
-          console.log(`insert call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-  }
+  const handleTemplateInsert = async () => {
+    try {
+      const result = await templateInsert(selectedTemplateURI, templateJSON);
+      notification.success({
+        message: 'Insert',
+        description: 'Insert succeeded'
+      });
+    } catch (error) {
+      console.log(`insert call failed: ${error}`);
+      setLoaded(true);
+      setError(error);
+    }
+  };
 
-  getTemplates(dbName) {
-    fetch(`/api/tde/templates?contentDB=${dbName}`, {
-      method: 'GET',
-      headers: this.buildAuthHeaders()
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(`templates call succeeded: ${JSON.stringify(result)}`);
-          this.setState({
-            isLoaded: true,
-            templates: result.templates
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log(`templates call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-  }
+  useEffect(() => {
+    const fn = async () => {
+      const data = await getDatabases().catch((error) => {
+        console.log(`databases call failed: ${error}`);
+        setLoaded(true);
+        setError(error);
+      });
+      setLoaded(true);
+      setContentDBs(data);
+    };
 
-  getTemplate(dbName, templateURI) {
-    fetch(`/api/tde/template/get?contentDB=${dbName}&templateURI=${templateURI}`, {
-      method: 'GET',
-      headers: this.buildAuthHeaders()
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log('template call succeeded');
-          this.setState({
-            isLoaded: true,
-            templateJSON: result
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log(`templates call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-  }
+    fn();
+  }, []);
 
-  componentDidMount() {
-    fetch('/api/databases', {
-      method: 'GET',
-      headers: this.buildAuthHeaders()
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            contentDBs: result
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log(`databases call failed: ${error}`);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
-  }
-
-  render() {
-    return (
-      <Row>
-        <Col md="auto">
-          <Menu
-            contentDBs={this.state.contentDBs}
-            onContentDbSelected={this.handleContentDbChange}
-            selectedContentDb={this.state.selectedContentDb}
-            templates={this.state.templates}
-            onTemplateSelected={this.handleTemplateChange}
-            onTemplateExtract={this.handleTemplateExtract}
-            onTemplateInsert={this.handleTemplateInsert}
-            selectedTemplateURI={this.state.selectedTemplateURI}
-            handleValidate={this.handleValidate}
-          ></Menu>
-          <Toast show={this.state.showNotification} onClose={this.toggleShowNotification}>
-            <Toast.Header>
-              <strong className="me-auto">{this.state.msgHeader}</strong>
-            </Toast.Header>
-            <Toast.Body>{this.state.msgBody}</Toast.Body>
-          </Toast>
-        </Col>
-        <Col>
-          <Row>
-            <Template
-              templateURI={this.state.selectedTemplateURI}
-              context={this.state.templateJSON.template.context}
-              collection={this.state.templateJSON.template.collections}
-              description={this.state.templateJSON.template.description}
-              handleURIChange={this.handleURIChange}
-              handleDescriptionChange={this.handleDescriptionChange}
-              handleContextChange={this.handleContextChange}
-              handleCollectionChange={this.handleCollectionChange}
-              handleRowChange={this.handleRowChange}
-            />
-          </Row>
-          <Row>
-            <SampleDocs
-              uris={this.state.sampleURIs}
-              addURI={this.addURI}
-              authHeaders={this.buildAuthHeaders()}
-              contentDB={this.state.selectedContentDb}
-            />
-          </Row>
-          <Row>
-            <Variables />
-          </Row>
-          <Row>
-            <ViewRows rowsSpec={this.state.templateJSON.template.rows} extractedData={this.state.extractedData} />
-          </Row>
-          <Row>
-            <Triples rowsSpec={this.state.templateJSON.template.rows} extractedData={this.state.extractedData} />
-          </Row>
-        </Col>
-      </Row>
-    );
-  }
-}
+  return (
+    <FlexBox width="100%" alignItems="flex-start" margin="2rem 0" gap="4rem">
+      <div className="left">
+        <Menu
+          contentDBs={contentDBs}
+          onContentDbSelected={handleContentDbChange}
+          selectedContentDb={selectedContentDb}
+          templates={templates}
+          onTemplateSelected={handleTemplateChange}
+          onTemplateExtract={handleTemplateExtract}
+          onTemplateInsert={handleTemplateInsert}
+          selectedTemplateURI={selectedTemplateURI}
+          handleValidate={handleValidate}
+        ></Menu>
+      </div>
+      <div className="right">
+        <FlexBox alignItems="stretch" flexDirection="column" gap="2rem">
+          <Template
+            templateURI={selectedTemplateURI}
+            context={templateJSON.template.context}
+            collection={templateJSON.template.collections}
+            description={templateJSON.template.description}
+            handleURIChange={handleURIChange}
+            handleDescriptionChange={handleDescriptionChange}
+            handleContextChange={handleContextChange}
+            handleCollectionChange={handleCollectionChange}
+            handleRowChange={handleRowChange}
+          />
+          <SampleDocs
+            uris={sampleURIs}
+            addURI={addURI}
+            authHeaders={buildAuthHeaders()}
+            contentDB={selectedContentDb}
+          />
+          <Variables />
+          <ViewRows rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
+          <Triples rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
+        </FlexBox>
+      </div>
+    </FlexBox>
+  );
+};
 
 export default Editor;

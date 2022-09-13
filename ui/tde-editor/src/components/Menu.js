@@ -1,60 +1,69 @@
 import React from 'react';
-import './Menu.css';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Container from 'react-bootstrap/esm/Container';
+import { B2Med } from './common';
+import { Select } from './Select';
+import { Box, FlexBox } from './Box';
+import { Button } from './Button';
 
-class Menu extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const Menu = ({
+  selectedTemplateURI,
+  selectedContentDb,
+  contentDBs,
+  templates,
+  onTemplateInsert,
+  onTemplateExtract,
+  onContentDbSelected,
+  onTemplateSelected,
+  handleValidate
+}) => {
+  const handleMenuSelect = (dbName, event) => {
+    onContentDbSelected(dbName);
+  };
 
-  handleMenuSelect(dbName, event) {
-    this.props.onContentDbSelected(dbName);
-  }
-
-  handleTemplateSelect(template, event) {
-    this.props.onTemplateSelected(template);
+  const handleTemplateSelect = (template, event) => {
+    onTemplateSelected(template);
     console.log(`handleTemplateSelect: ${JSON.stringify(template)}`);
-  }
+  };
 
-  handleExport() {
+  const handleExport = () => {
     console.log('handleExport');
-  }
+  };
 
-  render() {
-    return (
-      <Container>
-        <Row>Content Database</Row>
-        <DropdownButton title={this.props.selectedContentDb}>
-          {this.props.contentDBs.map((db) => (
-            <Dropdown.Item onClick={(e) => this.handleMenuSelect(db, e)}>{db}</Dropdown.Item>
-          ))}
-        </DropdownButton>
+  return (
+    <div>
+      <B2Med>Content Database</B2Med>
+      <Select
+        value={selectedContentDb}
+        options={contentDBs.map((db) => ({ value: db }))}
+        onChange={(v) => handleMenuSelect(v)}
+        fullwidth
+      />
 
-        <Row>
-          <label>Template</label>
-          <DropdownButton title={this.props.selectedTemplateURI}>
-            {this.props.templates.map((template) => (
-              <Dropdown.Item onClick={(e) => this.handleTemplateSelect(template.uri, e)}>{template.uri}</Dropdown.Item>
-            ))}
-          </DropdownButton>
-        </Row>
+      <Box marginTop="2rem">
+        <B2Med>Template</B2Med>
+        <Select
+          value={selectedTemplateURI}
+          options={templates.map((template) => ({ value: template.uri }))}
+          onChange={(v) => handleTemplateSelect(v)}
+          fullwidth
+        />
+      </Box>
 
-        <Row>
-          <ButtonGroup vertical>
-            <Button onClick={this.props.onTemplateInsert}>Insert</Button>
-            <Button onClick={this.handleExport}>Export</Button>
-            <Button onClick={this.props.handleValidate}>Validate</Button>
-            <Button onClick={this.props.onTemplateExtract}>Extract</Button>
-          </ButtonGroup>
-        </Row>
-      </Container>
-    );
-  }
-}
+      <FlexBox marginTop="4rem" flexDirection="column" gap="2rem">
+        <Button onClick={onTemplateInsert} block type="primary">
+          Insert
+        </Button>
+        <Button onClick={handleExport} block type="primary">
+          Export
+        </Button>
+        <Button onClick={handleValidate} block type="primary">
+          Validate
+        </Button>
+        <Button onClick={onTemplateExtract} block type="primary">
+          Extract
+        </Button>
+      </FlexBox>
+    </div>
+  );
+};
 
 export default Menu;

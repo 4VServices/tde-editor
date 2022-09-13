@@ -1,7 +1,12 @@
 import React, { useMemo } from 'react';
-import Container from 'react-bootstrap/esm/Container';
-import './ExtractedTriples.css';
-import Stack from 'react-bootstrap/Stack';
+import styled from 'styled-components';
+import { FlexBox } from './Box';
+import { B3Reg } from './common';
+import { Group } from './Group';
+
+const Label = styled(B3Reg)`
+  width: 18%;
+`;
 
 const ExtractedTriples = ({ extractedData }) => {
   const extractedTriples = useMemo(() => {
@@ -23,32 +28,33 @@ const ExtractedTriples = ({ extractedData }) => {
   }, [extractedData]);
 
   return (
-    <Container className="extractedTriples">
-      <h3>Extracted Triples</h3>
+    <Group title="Extracted Triples">
       {!extractedTriples.length && <div>No rows found</div>}
       {extractedTriples?.length > 0 && (
-        <Stack gap={3}>
+        <FlexBox flexDirection="column" gap="1rem" alignItems="stretch">
           {extractedTriples.map((triple, index) => {
             return (
-              <div className="triple-container" key={`${triple.object}-${index}`}>
-                <Stack direction="horizontal" gap={3}>
-                  <div className="label">Subject:</div>
-                  <div>{triple.subject}</div>
-                </Stack>
-                <Stack direction="horizontal" gap={3}>
-                  <div className="label">Predicate:</div>
-                  <div>{triple.predicate}</div>
-                </Stack>
-                <Stack direction="horizontal" gap={3}>
-                  <div className="label">Object:</div>
-                  <div>{triple.object}</div>
-                </Stack>
-              </div>
+              <Group key={`${triple.object}-${index}`}>
+                <FlexBox gap="0.8rem" flexDirection="column" alignItems="stretch">
+                  <FlexBox gap="1rem">
+                    <Label>Subject:</Label>
+                    <B3Reg>{triple.subject}</B3Reg>
+                  </FlexBox>
+                  <FlexBox gap="1rem">
+                    <Label>Predicate:</Label>
+                    <B3Reg>{triple.predicate}</B3Reg>
+                  </FlexBox>
+                  <FlexBox gap="1rem" flexWrap="nowrap">
+                    <Label>Object:</Label>
+                    <B3Reg>{triple.object}</B3Reg>
+                  </FlexBox>
+                </FlexBox>
+              </Group>
             );
           })}
-        </Stack>
+        </FlexBox>
       )}
-    </Container>
+    </Group>
   );
 };
 

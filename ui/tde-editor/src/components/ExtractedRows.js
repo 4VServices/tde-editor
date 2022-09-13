@@ -1,8 +1,8 @@
+import { Table } from 'antd';
 import React, { useMemo } from 'react';
-import './ExtractedRows.css';
-import Container from 'react-bootstrap/Container';
-import Table from 'react-bootstrap/Table';
-import Stack from 'react-bootstrap/Stack';
+import { FlexBox } from './Box';
+import { B2Med, B3Reg } from './common';
+import { Group } from './Group';
 
 const ExtractedRows = ({ rowsSpec, extractedData }) => {
   const extractedRows = useMemo(() => {
@@ -34,51 +34,49 @@ const ExtractedRows = ({ rowsSpec, extractedData }) => {
   }, [extractedData, rowsSpec]);
 
   return (
-    <Container className="extractedRows">
-      <h3>ExtractedRows</h3>
+    <Group title="Extracted Rows">
       {!extractedData && <div>No rows found</div>}
-      <Stack gap={3}>
+      <FlexBox gap={'1rem'} flexDirection="column" alignItems="stretch">
         {extractedRows?.map((extractedRow, i) => {
           return (
-            <div key={i} className="extracted-row-container">
-              <Stack direction="horizontal" gap={5} style={{ marginBottom: '8px' }}>
-                <Stack direction="horizontal" gap={1}>
-                  <div>Schema:</div>
-                  <div className="bold-text">{extractedRow.schema}</div>
-                </Stack>
-                <Stack direction="horizontal" gap={1}>
-                  <div>View:</div>
-                  <div className="bold-text">{extractedRow.view}</div>
-                </Stack>
-              </Stack>
-              <Table striped bordered hover responsive>
-                <thead>
-                  <tr>
-                    <th>Extracted From</th>
-                    {extractedRow.columns?.map((column) => (
-                      <th key={column.val}>{column.name}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {extractedRow.datas?.map((data, index) => {
-                    return (
-                      <tr key={index}>
-                        <td>{data.key}</td>
-                        {extractedRow.columns?.map((column) => (
-                          <td key={column.val}>{data[column.name]}</td>
-                        ))}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </div>
+            <Group key={i} title="">
+              <FlexBox gap={'2rem'} margin="0 0 1rem 0">
+                <FlexBox gap={'.8rem'}>
+                  <B3Reg>Schema:</B3Reg>
+                  <B2Med>{extractedRow.schema}</B2Med>
+                </FlexBox>
+                <FlexBox gap={'.8rem'}>
+                  <B3Reg>View:</B3Reg>
+                  <B2Med>{extractedRow.view}</B2Med>
+                </FlexBox>
+              </FlexBox>
+              {extractedRow.datas?.length > 0 && (
+                <Table
+                  dataSource={extractedRow.datas}
+                  rowKey={(record) => record.key}
+                  columns={getColumns(extractedRow.columns)}
+                  pagination={false}
+                  size="small"
+                  bordered
+                />
+              )}
+            </Group>
           );
         })}
-      </Stack>
-    </Container>
+      </FlexBox>
+    </Group>
   );
+};
+
+const getColumns = (columns = []) => {
+  return columns.map((column) => {
+    return {
+      key: column.val,
+      title: column.name,
+      dataIndex: column.name,
+      render: (value) => <B3Reg>{value}</B3Reg>
+    };
+  });
 };
 
 export default ExtractedRows;
