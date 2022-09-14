@@ -3,7 +3,7 @@ import Menu from './Menu.js';
 import Template from './Template.js';
 import SampleDocs from './SampleDocs.js';
 import Variables from './Variables.js';
-import ViewRows from './ViewRows.js';
+import Views from './Views.js';
 import Triples from './Triples.js';
 import { getDatabases } from '../apis/databases';
 import { buildAuthHeaders } from '../apis/buildAuthHeader';
@@ -220,7 +220,7 @@ const Editor = (props) => {
             contentDB={selectedContentDb}
           />
           <Variables />
-          <ViewRows
+          <Views
             rowsSpec={templateJSON.template.rows}
             extractedData={extractedData}
             onRowChange={handleRowChange}

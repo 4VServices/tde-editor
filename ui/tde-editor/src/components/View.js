@@ -7,6 +7,7 @@ import { Group } from './Group';
 import { Select } from './Select';
 import { TextEdit } from './TextEdit';
 import styled from 'styled-components';
+import ExtractedRows from './ExtractedRows';
 
 const ColumnsContainer = styled.div`
   display: flex;
@@ -16,10 +17,10 @@ const ColumnsContainer = styled.div`
   padding: 1rem 0;
 `;
 
-const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
+const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }) => {
   const handleColumnChange = useCallback(
     (index, key, value) => {
-      const columns = viewRow.columns.map((column, i) => {
+      const columns = view.columns.map((column, i) => {
         if (i === index) {
           return {
             ...column,
@@ -31,21 +32,21 @@ const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
       });
 
       onRowChange(rowIndex, {
-        ...viewRow,
+        ...view,
         columns
       });
     },
-    [viewRow, onRowChange, rowIndex]
+    [view, onRowChange, rowIndex]
   );
 
   const handleRowChange = useCallback(
     (index, key, value) => {
       onRowChange(index, {
-        ...viewRow,
+        ...view,
         [key]: value
       });
     },
-    [viewRow, onRowChange]
+    [view, onRowChange]
   );
 
   const handleDeleteColumn = useCallback(
@@ -53,31 +54,31 @@ const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
       const confirm = window.confirm('Are you sure you want to delete?');
       if (confirm) {
         onRowChange(rowIndex, {
-          ...viewRow,
-          columns: viewRow.columns.filter((c, i) => i !== columnIndex)
+          ...view,
+          columns: view.columns.filter((c, i) => i !== columnIndex)
         });
       }
     },
-    [rowIndex, onRowChange, viewRow]
+    [rowIndex, onRowChange, view]
   );
 
   const handleAddColumn = useCallback(() => {
     onRowChange(rowIndex, {
-      ...viewRow,
-      columns: [...(viewRow.columns || []), DefaultColumn]
+      ...view,
+      columns: [...(view.columns || []), DefaultColumn]
     });
-  }, [onRowChange, rowIndex, viewRow]);
+  }, [onRowChange, rowIndex, view]);
 
   return (
-    <Group title={`Row ${rowIndex + 1}`}>
+    <Group title={`View ${rowIndex + 1}`}>
       <FlexBox alignItems="stretch" gap="2rem" justifyContent="space-between">
         <FlexBox gap="2rem">
           <TextEdit
             label="Schema"
-            value={viewRow.schemaName}
+            value={view.schemaName}
             onChange={(v) => handleRowChange(rowIndex, 'schemaName', v)}
           />
-          <TextEdit label="View" value={viewRow.viewName} onChange={(v) => handleRowChange(rowIndex, 'viewName', v)} />
+          <TextEdit label="View" value={view.viewName} onChange={(v) => handleRowChange(rowIndex, 'viewName', v)} />
         </FlexBox>
         <FlexBox gap="2rem">
           <Button onClick={handleAddColumn}>Add column</Button>
@@ -87,7 +88,7 @@ const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
         </FlexBox>
       </FlexBox>
       <ColumnsContainer>
-        {viewRow.columns?.map((column, columnIndex) => {
+        {view.columns?.map((column, columnIndex) => {
           return (
             <Group title={`Column ${columnIndex + 1}`} key={columnIndex}>
               <FlexBox flexDirection="column" alignItems="stretch" gap="1rem">
@@ -152,6 +153,7 @@ const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
           );
         })}
       </ColumnsContainer>
+      <ExtractedRows extractedData={extractedData} viewSpec={view} />
     </Group>
   );
 };
@@ -185,4 +187,4 @@ const DefaultColumn = {
   reindexing: 'hidden'
 };
 
-export default ViewRow;
+export default View;
