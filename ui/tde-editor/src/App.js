@@ -12,9 +12,11 @@ const Container = styled.div`
 
   .left {
     width: 220px;
+    min-width: 220px;
   }
   .right {
     flex-grow: 1;
+    overflow-x: hidden;
   }
 `;
 
@@ -27,7 +29,7 @@ function App() {
   return (
     <div className="App">
       <Container>
-        <FlexBox width="100%" gap="4rem" margin="2rem 0">
+        <FlexBox width="100%" gap="2rem" margin="2rem 0">
           <div className="left">
             <FlexBox justifyContent="space-between">
               <Img src={logo} className="App-logo" alt="logo" />

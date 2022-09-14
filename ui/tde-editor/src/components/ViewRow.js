@@ -6,6 +6,15 @@ import { B3Reg } from './common';
 import { Group } from './Group';
 import { Select } from './Select';
 import { TextEdit } from './TextEdit';
+import styled from 'styled-components';
+
+const ColumnsContainer = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 2rem;
+  padding: 1rem 0;
+`;
 
 const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
   const handleColumnChange = useCallback(
@@ -77,47 +86,42 @@ const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
           </Button>
         </FlexBox>
       </FlexBox>
-      <FlexBox flexDirection="column" alignItems="stretch" gap="1rem" marginTop="1rem">
+      <ColumnsContainer>
         {viewRow.columns?.map((column, columnIndex) => {
           return (
             <Group title={`Column ${columnIndex + 1}`} key={columnIndex}>
               <FlexBox flexDirection="column" alignItems="stretch" gap="1rem">
-                <FlexBox gap="1rem" justifyContent="space-between">
-                  <FlexBox gap="1rem">
-                    <TextEdit
-                      label="name"
-                      value={column.name}
-                      onChangeDebounced={(v) => handleColumnChange(columnIndex, 'name', v)}
-                    />
-                    <Select
-                      label="type"
-                      value={column.scalarType}
-                      options={ScalarTypes}
-                      onChange={(v) => handleColumnChange(columnIndex, 'scalarType', v)}
-                    />
-                    <TextEdit
-                      label="Default"
-                      value={column.default}
-                      onChangeDebounced={(v) => handleColumnChange(columnIndex, 'default', v)}
-                    />
-                    <Checkbox
-                      checked={column.nullable}
-                      onChange={(e) => handleColumnChange(columnIndex, 'nullable', e.target.checked)}
-                    >
-                      nullable
-                    </Checkbox>
-                  </FlexBox>
+                <FlexBox gap="1rem" justifyContent="space-between" alignItems="flex-end">
+                  <TextEdit
+                    label="name"
+                    value={column.name}
+                    onChangeDebounced={(v) => handleColumnChange(columnIndex, 'name', v)}
+                  />
                   <Button danger onClick={() => handleDeleteColumn(columnIndex)}>
                     Delete
                   </Button>
                 </FlexBox>
-                <FlexBox gap="1rem" justifyContent="space-between">
-                  <TextEdit
-                    label="value"
-                    width="30rem"
-                    value={column.val}
-                    onChangeDebounced={(v) => handleColumnChange(columnIndex, 'val', v)}
+                <FlexBox gap="1rem" flexWrap="nowrap">
+                  <Select
+                    label="type"
+                    value={column.scalarType}
+                    options={ScalarTypes}
+                    onChange={(v) => handleColumnChange(columnIndex, 'scalarType', v)}
                   />
+                  <Select
+                    label="Reindexing"
+                    value={column.reindexing}
+                    options={Reindexings}
+                    onChange={(v) => handleColumnChange(columnIndex, 'reindexing', v)}
+                  />
+                </FlexBox>
+                <FlexBox justifyContent="space-between">
+                  <Checkbox
+                    checked={column.nullable}
+                    onChange={(e) => handleColumnChange(columnIndex, 'nullable', e.target.checked)}
+                  >
+                    nullable
+                  </Checkbox>
                   <Checkbox
                     checked={column.rejectInvalid}
                     onChange={(e) => handleColumnChange(columnIndex, 'rejectInvalid', e.target.checked)}
@@ -125,28 +129,29 @@ const ViewRow = ({ viewRow, index: rowIndex, onRowChange, onRowDelete }) => {
                     Reject Invalid
                   </Checkbox>
                 </FlexBox>
-                <FlexBox gap="1rem" justifyContent="space-between" alignItems="flex-end">
-                  <TextEdit
-                    label="Collation"
-                    value={column.collation}
-                    rootStyle={{ flexGrow: 1 }}
-                    onChangeDebounced={(v) => handleColumnChange(columnIndex, 'collation', v)}
-                    disabled={column.scalarType !== 'string'}
-                  />
-                  <FlexBox gap="1rem" marginLeft="2rem">
-                    <B3Reg>Reindexing</B3Reg>
-                    <Select
-                      value={column.reindexing}
-                      options={Reindexings}
-                      onChange={(v) => handleColumnChange(columnIndex, 'reindexing', v)}
-                    />
-                  </FlexBox>
-                </FlexBox>
+                <TextEdit
+                  label="value"
+                  width="30rem"
+                  value={column.val}
+                  onChangeDebounced={(v) => handleColumnChange(columnIndex, 'val', v)}
+                />
+                <TextEdit
+                  label="Default"
+                  value={column.default}
+                  onChangeDebounced={(v) => handleColumnChange(columnIndex, 'default', v)}
+                />
+                <TextEdit
+                  label="Collation"
+                  value={column.collation}
+                  rootStyle={{ flexGrow: 1 }}
+                  onChangeDebounced={(v) => handleColumnChange(columnIndex, 'collation', v)}
+                  disabled={column.scalarType !== 'string'}
+                />
               </FlexBox>
             </Group>
           );
         })}
-      </FlexBox>
+      </ColumnsContainer>
     </Group>
   );
 };

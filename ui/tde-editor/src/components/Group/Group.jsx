@@ -6,6 +6,7 @@ const Root = styled.div`
   border-radius: 10px;
   margin-top: 1rem;
   padding: 2rem;
+  max-width: 100%;
 `;
 
 const Title = styled.div`

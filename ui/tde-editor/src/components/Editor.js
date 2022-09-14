@@ -186,7 +186,7 @@ const Editor = (props) => {
   }, []);
 
   return (
-    <FlexBox width="100%" alignItems="flex-start" margin="2rem 0" gap="4rem">
+    <FlexBox width="100%" alignItems="flex-start" margin="2rem 0" gap="4rem" flexWrap="nowrap">
       <div className="left">
         <Menu
           contentDBs={contentDBs}
