@@ -57,6 +57,7 @@ h6 {
 /* Scroll bar styling */
 ::-webkit-scrollbar {
   width: 0.8rem;
+  height: 0.8rem;
   position: absolute;
 }
 
