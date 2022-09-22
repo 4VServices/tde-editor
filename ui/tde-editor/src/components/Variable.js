@@ -14,7 +14,7 @@ const Variable = ({ varSpec, index, onVarDelete, onVarMove, isLast }) => {
 
   return (
     <Group>
-      <FlexBox flexDirection="row">
+      <FlexBox flexDirection="row" gap="2rem">
         <FlexBox flexDirection="column" flexGrow="1" gap="1rem" alignItems="stretch">
           <TextEdit label="name" value={varSpec.name} />
           <TextEdit label="value" value={varSpec.val} />
