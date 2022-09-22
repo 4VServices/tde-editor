@@ -1,4 +1,4 @@
-@import "~antd/dist/antd.css";
+@import '~antd/dist/antd.css';
 
 html {
   font-size: 10px;
@@ -51,7 +51,7 @@ h6 {
 }
 
 .ant-table-thead > tr > th {
-  background: #F7F8FA !important;
+  background: #f7f8fa !important;
 }
 
 /* Scroll bar styling */
@@ -71,4 +71,9 @@ h6 {
   border-radius: 99px;
   cursor: pointer;
   user-select: none;
+}
+
+.menu {
+  position: sticky;
+  top: 0;
 }

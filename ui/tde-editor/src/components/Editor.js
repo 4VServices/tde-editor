@@ -224,7 +224,7 @@ const Editor = (props) => {
 
   return (
     <FlexBox width="100%" alignItems="flex-start" margin="2rem 0" gap="4rem" flexWrap="nowrap">
-      <div className="left">
+      <div className="left menu">
         <Menu
           contentDBs={contentDBs}
           onContentDbSelected={handleContentDbChange}
