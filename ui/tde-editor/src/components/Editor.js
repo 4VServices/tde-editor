@@ -101,6 +101,43 @@ const Editor = (props) => {
     }
   };
 
+  const handleVarDelete = (varIndex) => {
+    const confirm = window.confirm('Are you sure you want to delete?');
+    if (confirm) {
+      console.log(`Deleting variable with index ${varIndex}`);
+      let template = templateJSON;
+      template.template.vars = template.template.vars.filter((currVar, index) => {
+        return index !== varIndex;
+      });
+      setTemplateJSON({ ...template });
+    }
+  };
+
+  const handleVarAdd = () => {
+    let template = templateJSON;
+    template.template.vars = [...template.template.vars, { name: '', val: '' }];
+    setTemplateJSON({ ...template });
+  };
+
+  const handleVarMove = (index, direction) => {
+    let variables = templateJSON.template.vars;
+
+    // direction < 0 means we're moving a variable up (earlier in the array); direction > 0 means we're moving a
+    // variable down (later in the array). Moving `index` later is the same as moving `index + 1` earlier.
+    let targetIndex = index;
+    if (direction > 0) {
+      targetIndex++;
+    }
+
+    templateJSON.template.vars = variables
+      .slice(0, targetIndex - 1)
+      .concat(variables[targetIndex])
+      .concat(variables[targetIndex - 1])
+      .concat(variables.slice(targetIndex + 1));
+
+    setTemplateJSON({ ...templateJSON });
+  };
+
   const handleAddRow = () => {
     let template = templateJSON;
     template.template.rows = [...template.template.rows, {}];
@@ -187,7 +224,7 @@ const Editor = (props) => {
 
   return (
     <FlexBox width="100%" alignItems="flex-start" margin="2rem 0" gap="4rem" flexWrap="nowrap">
-      <div className="left">
+      <div className="left menu">
         <Menu
           contentDBs={contentDBs}
           onContentDbSelected={handleContentDbChange}
@@ -219,7 +256,12 @@ const Editor = (props) => {
             authHeaders={buildAuthHeaders()}
             contentDB={selectedContentDb}
           />
-          <Variables />
+          <Variables
+            variables={templateJSON.template.vars}
+            onVarDelete={handleVarDelete}
+            onVarAdd={handleVarAdd}
+            onVarMove={handleVarMove}
+          />
           <Views
             rowsSpec={templateJSON.template.rows}
             extractedData={extractedData}
