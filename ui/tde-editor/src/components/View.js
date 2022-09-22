@@ -124,8 +124,10 @@ const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }
                     nullable
                   </Checkbox>
                   <Checkbox
-                    checked={column.rejectInvalid}
-                    onChange={(e) => handleColumnChange(columnIndex, 'rejectInvalid', e.target.checked)}
+                    checked={column.invalidValues === 'reject'}
+                    onChange={(e) =>
+                      handleColumnChange(columnIndex, 'invalidValues', e.target.checked ? 'reject' : 'ignore')
+                    }
                   >
                     Reject Invalid
                   </Checkbox>
