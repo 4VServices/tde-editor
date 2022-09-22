@@ -83,7 +83,7 @@ const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }
         <FlexBox gap="2rem">
           <Button onClick={handleAddColumn}>Add column</Button>
           <Button danger onClick={() => onRowDelete(rowIndex)}>
-            Delete row
+            Delete view
           </Button>
         </FlexBox>
       </FlexBox>
