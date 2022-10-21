@@ -28,7 +28,7 @@ const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
         (result) => {
           console.log('/api/document call succeeded');
           // TODO: handle XML content
-          setCurrentViewedDoc(JSON.stringify(result));
+          setCurrentViewedDoc(JSON.stringify(result, null, 2));
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
