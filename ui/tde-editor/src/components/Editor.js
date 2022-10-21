@@ -274,7 +274,7 @@ const Editor = (props) => {
             onRowDelete={handleRowDelete}
             onAddRow={handleAddRow}
           />
-          <Triples rowsSpec={templateJSON.template.rows} extractedData={extractedData} />
+          <Triples triplesSpec={templateJSON.template.triples} extractedData={extractedData} />
         </FlexBox>
       </div>
     </FlexBox>
