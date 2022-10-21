@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Menu from './Menu.js';
 import Template from './Template.js';
 import SampleDocs from './SampleDocs.js';
@@ -101,6 +101,17 @@ const Editor = (props) => {
     }
   };
 
+  const handleTripleChange = (tripleIndex, changedTriple) => {
+    let template = templateJSON;
+    template.template.triples = template.template.triples.map((triple, index) => {
+      if (index === tripleIndex) {
+        return changedTriple;
+      }
+      return triple;
+    });
+    setTemplateJSON({ ...template });
+  };
+
   const handleVarDelete = (varIndex) => {
     const confirm = window.confirm('Are you sure you want to delete?');
     if (confirm) {
@@ -185,6 +196,10 @@ const Editor = (props) => {
         setLoaded(true);
         setError(error);
         setExtractedData(null);
+        notification.error({
+          message: 'Extraction Failed',
+          description: 'boom'
+        });
       }
     } else {
       notification.warn({
@@ -273,7 +288,11 @@ const Editor = (props) => {
             onViewDelete={handleViewDelete}
             onViewAdd={handleViewAdd}
           />
-          <Triples triplesSpec={templateJSON.template.triples} extractedData={extractedData} />
+          <Triples
+            triplesSpec={templateJSON.template.triples}
+            extractedData={extractedData}
+            onTripleChange={handleTripleChange}
+          />
         </FlexBox>
       </div>
     </FlexBox>
