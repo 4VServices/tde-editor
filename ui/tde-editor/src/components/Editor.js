@@ -79,23 +79,23 @@ const Editor = (props) => {
     setTemplateJSON(template);
   };
 
-  const handleRowChange = (rowIndex, changedRow) => {
+  const handleViewChange = (viewIndex, changedView) => {
     let template = templateJSON;
-    template.template.rows = template.template.rows.map((row, index) => {
-      if (index === rowIndex) {
-        return changedRow;
+    template.template.rows = template.template.rows.map((view, index) => {
+      if (index === viewIndex) {
+        return changedView;
       }
-      return row;
+      return view;
     });
     setTemplateJSON({ ...template });
   };
 
-  const handleRowDelete = (rowIndex) => {
+  const handleViewDelete = (viewIndex) => {
     const confirm = window.confirm('Are you sure you want to delete?');
     if (confirm) {
       let template = templateJSON;
-      template.template.rows = template.template.rows.filter((row, index) => {
-        return index !== rowIndex;
+      template.template.rows = template.template.rows.filter((view, index) => {
+        return index !== viewIndex;
       });
       setTemplateJSON({ ...template });
     }
@@ -138,9 +138,9 @@ const Editor = (props) => {
     setTemplateJSON({ ...templateJSON });
   };
 
-  const handleAddRow = () => {
+  const handleViewAdd = () => {
     let template = templateJSON;
-    template.template.rows = [...template.template.rows, {}];
+    template.template.rows = [...template.template.rows, { viewLayout: 'sparse' }];
     setTemplateJSON({ ...template });
   };
 
@@ -253,7 +253,6 @@ const Editor = (props) => {
             handleDescriptionChange={handleDescriptionChange}
             handleContextChange={handleContextChange}
             handleCollectionChange={handleCollectionChange}
-            handleRowChange={handleRowChange}
           />
           <SampleDocs
             uris={sampleURIs}
@@ -268,11 +267,11 @@ const Editor = (props) => {
             onVarMove={handleVarMove}
           />
           <Views
-            rowsSpec={templateJSON.template.rows}
+            viewsSpec={templateJSON.template.rows}
             extractedData={extractedData}
-            onRowChange={handleRowChange}
-            onRowDelete={handleRowDelete}
-            onAddRow={handleAddRow}
+            onViewChange={handleViewChange}
+            onViewDelete={handleViewDelete}
+            onViewAdd={handleViewAdd}
           />
           <Triples triplesSpec={templateJSON.template.triples} extractedData={extractedData} />
         </FlexBox>

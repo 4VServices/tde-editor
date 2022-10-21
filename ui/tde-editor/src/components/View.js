@@ -17,7 +17,7 @@ const ColumnsContainer = styled.div`
   padding: 1rem 0;
 `;
 
-const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }) => {
+const View = ({ view, index: viewIndex, onViewChange, onViewDelete, extractedData }) => {
   const handleColumnChange = useCallback(
     (index, key, value) => {
       const columns = view.columns.map((column, i) => {
@@ -31,64 +31,70 @@ const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }
         return column;
       });
 
-      onRowChange(rowIndex, {
+      onViewChange(viewIndex, {
         ...view,
         columns
       });
     },
-    [view, onRowChange, rowIndex]
+    [view, onViewChange, viewIndex]
   );
 
-  const handleRowChange = useCallback(
+  const handleViewChange = useCallback(
     (index, key, value) => {
-      onRowChange(index, {
+      onViewChange(index, {
         ...view,
         [key]: value
       });
     },
-    [view, onRowChange]
+    [view, onViewChange]
   );
 
   const handleDeleteColumn = useCallback(
     (columnIndex) => {
       const confirm = window.confirm('Are you sure you want to delete?');
       if (confirm) {
-        onRowChange(rowIndex, {
+        onViewChange(viewIndex, {
           ...view,
           columns: view.columns.filter((c, i) => i !== columnIndex)
         });
       }
     },
-    [rowIndex, onRowChange, view]
+    [viewIndex, onViewChange, view]
   );
 
   const handleAddColumn = useCallback(() => {
-    onRowChange(rowIndex, {
+    onViewChange(viewIndex, {
       ...view,
       columns: [...(view.columns || []), DefaultColumn]
     });
-  }, [onRowChange, rowIndex, view]);
+  }, [onViewChange, viewIndex, view]);
 
   return (
-    <Group title={`View ${rowIndex + 1}`}>
+    <Group title={`View ${viewIndex + 1}`}>
       <FlexBox alignItems="stretch" gap="2rem" justifyContent="space-between">
         <FlexBox gap="2rem">
           <TextEdit
             label="Schema"
+            require="true"
             value={view.schemaName}
-            onChange={(v) => handleRowChange(rowIndex, 'schemaName', v)}
+            onChange={(v) => handleViewChange(viewIndex, 'schemaName', v)}
           />
-          <TextEdit label="View" value={view.viewName} onChange={(v) => handleRowChange(rowIndex, 'viewName', v)} />
+          <TextEdit
+            label="View"
+            require="true"
+            value={view.viewName}
+            onChange={(v) => handleViewChange(viewIndex, 'viewName', v)}
+          />
           <Select
             label="View Layout"
             value={view.viewLayout}
             options={ViewLayout}
-            onChange={(v) => handleRowChange(rowIndex, 'viewLayout', v)}
+            onChange={(v) => handleViewChange(viewIndex, 'viewLayout', v)}
           />
         </FlexBox>
         <FlexBox gap="2rem">
           <Button onClick={handleAddColumn}>Add column</Button>
-          <Button danger onClick={() => onRowDelete(rowIndex)}>
+          <Button danger onClick={() => onViewDelete(viewIndex)}>
             Delete view
           </Button>
         </FlexBox>
