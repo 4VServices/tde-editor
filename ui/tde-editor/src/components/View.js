@@ -24,7 +24,7 @@ const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }
         if (i === index) {
           return {
             ...column,
-            collation: key === 'scalarType' && value !== 'string' ? '' : column.collation,
+            collation: key === 'scalarType' && value !== 'string' ? undefined : column.collation,
             [key]: value
           };
         }
@@ -79,6 +79,12 @@ const View = ({ view, index: rowIndex, onRowChange, onRowDelete, extractedData }
             onChange={(v) => handleRowChange(rowIndex, 'schemaName', v)}
           />
           <TextEdit label="View" value={view.viewName} onChange={(v) => handleRowChange(rowIndex, 'viewName', v)} />
+          <Select
+            label="View Layout"
+            value={view.viewLayout}
+            options={ViewLayout}
+            onChange={(v) => handleRowChange(rowIndex, 'viewLayout', v)}
+          />
         </FlexBox>
         <FlexBox gap="2rem">
           <Button onClick={handleAddColumn}>Add column</Button>
@@ -184,8 +190,10 @@ const ScalarTypes = [
 
 const Reindexings = [{ value: 'hidden' }, { value: 'visible' }];
 
+const ViewLayout = [{ value: 'sparse' }, { value: 'identical' }];
+
 const DefaultColumn = {
-  rejectInvalid: true,
+  invalidValues: 'ignore',
   reindexing: 'hidden'
 };
 
