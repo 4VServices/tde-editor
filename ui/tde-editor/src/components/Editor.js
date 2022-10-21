@@ -197,10 +197,15 @@ const Editor = (props) => {
   const handleTemplateInsert = async () => {
     try {
       const result = await templateInsert(selectedTemplateURI, templateJSON);
-      notification.success({
-        message: 'Insert',
-        description: 'Insert succeeded'
-      });
+      if (result.valid) {
+        notification.success({
+          message: 'Insert',
+          description: 'Insert succeeded'
+        });
+      } else {
+        setLoaded(true);
+        setError(result.message);
+      }
     } catch (error) {
       console.log(`insert call failed: ${error}`);
       setLoaded(true);
