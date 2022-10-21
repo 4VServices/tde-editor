@@ -1,5 +1,5 @@
 import { Checkbox } from 'antd';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { FlexBox } from './Box';
 import { Button } from './Button';
 import { B3Reg } from './common';
