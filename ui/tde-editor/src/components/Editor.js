@@ -185,20 +185,29 @@ const Editor = (props) => {
       let uriParam = sampleURIs.map((uri) => `uri=${uri}`).join('&');
       try {
         const result = await templateExtract(uriParam, selectedContentDb, templateJSON);
-        setExtractedData(result);
+        if (result.success) {
+          setExtractedData(result.extracted);
 
-        notification.success({
-          message: 'Extraction',
-          description: 'Extraction succeeded'
-        });
+          notification.success({
+            message: 'Extraction',
+            description: 'Extraction succeeded'
+          });
+        } else {
+          setLoaded(true);
+          setError(result.error);
+          setExtractedData(null);
+          notification.error({
+            message: 'Extraction Failed',
+            description: result.error.data.join('; ')
+          });
+        }
       } catch (error) {
         console.log(`extraction call failed: ${error}`);
         setLoaded(true);
         setError(error);
         setExtractedData(null);
         notification.error({
-          message: 'Extraction Failed',
-          description: 'boom'
+          message: 'Extraction Failed'
         });
       }
     } else {

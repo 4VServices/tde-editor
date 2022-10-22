@@ -18,7 +18,20 @@ function extract(uris, template) {
     if (template !== undefined && template !== null && !fn.empty(template)) {
       let validTemplate = xdmp.toJSON(tde.validate([template])).toObject();
       if (validTemplate.valid === true) {
-        return tde.nodeDataExtract(docs, [template]);
+        let result = { success: true };
+        try {
+          result.extracted = tde.nodeDataExtract(docs, [template]);
+        } catch (ex) {
+          if (ex.name === 'TDE-EVALFAILED') {
+            // While I'd rather return a 400, doing so prevents a response body.
+            result.success = false;
+            result.error = ex;
+          } else {
+            xdmp.rethrow();
+          }
+        }
+        xdmp.log(`Result: ${xdmp.quote(result)}`);
+        return result;
       } else {
         xdmp.setResponseCode(400, 'Bad Request');
       }
