@@ -21,9 +21,17 @@ const Triple = ({ triple, index: tripleIndex, onTripleChange, onTripleDelete, ex
         onChange={(val) => handleTripleChange(tripleIndex, 'subject', val)}
       />
 
-      <TextEdit label="Predicate" value={triple.predicate.val} />
+      <TextEdit
+        label="Predicate"
+        value={triple.predicate.val}
+        onChange={(val) => handleTripleChange(tripleIndex, 'predicate', val)}
+      />
 
-      <TextEdit label="Object" value={triple.object.val} />
+      <TextEdit
+        label="Object"
+        value={triple.object.val}
+        onChange={(val) => handleTripleChange(tripleIndex, 'object', val)}
+      />
     </Group>
   );
 };
