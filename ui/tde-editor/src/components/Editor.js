@@ -219,21 +219,24 @@ const Editor = (props) => {
   };
 
   const handleTemplateInsert = async () => {
-    try {
-      const result = await templateInsert(selectedTemplateURI, templateJSON);
-      if (result.valid) {
-        notification.success({
-          message: 'Insert',
-          description: 'Insert succeeded'
-        });
-      } else {
+    const confirm = window.confirm('Inserting the template may cause reindexing. Proceed?');
+    if (confirm) {
+      try {
+        const result = await templateInsert(selectedTemplateURI, templateJSON);
+        if (result.valid) {
+          notification.success({
+            message: 'Insert',
+            description: 'Insert succeeded'
+          });
+        } else {
+          setLoaded(true);
+          setError(result.message);
+        }
+      } catch (error) {
+        console.log(`insert call failed: ${error}`);
         setLoaded(true);
-        setError(result.message);
+        setError(error);
       }
-    } catch (error) {
-      console.log(`insert call failed: ${error}`);
-      setLoaded(true);
-      setError(error);
     }
   };
 
