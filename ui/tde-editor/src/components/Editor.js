@@ -198,7 +198,7 @@ const Editor = (props) => {
           setExtractedData(null);
           notification.error({
             message: 'Extraction Failed',
-            description: result.error.data.join('; ')
+            description: result.error.message
           });
         }
       } catch (error) {

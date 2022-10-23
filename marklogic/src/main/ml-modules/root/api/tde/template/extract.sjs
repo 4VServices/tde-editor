@@ -25,15 +25,17 @@ function extract(uris, template) {
           if (ex.name === 'TDE-EVALFAILED') {
             // While I'd rather return a 400, doing so prevents a response body.
             result.success = false;
-            result.error = ex;
+            result.error = { message: ex.data.join('; ') };
           } else {
             xdmp.rethrow();
           }
         }
-        xdmp.log(`Result: ${xdmp.quote(result)}`);
         return result;
       } else {
-        xdmp.setResponseCode(400, 'Bad Request');
+        return {
+          success: false,
+          error: validTemplate
+        };
       }
     } else {
       xdmp.setResponseCode(400, 'MISSING-BODY');
