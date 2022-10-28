@@ -9,6 +9,36 @@ used to populate relational-style views, semantic triples, or both.
 
 [Tutorial](https://developer.marklogic.com/learn/template-driven-extraction/)
 
+## Deploying the Editor
+
+Note that the editor is intended for use in local environments. Making changes to a template and inserting it will
+cause MarkLogic to reindex. You might want this, but be conscious of that in environments that have a significant
+amount of data.
+
+### Prepare to deploy
+
+You'll do these steps once.
+
+1. Clone this repo (https://github.com/4VServices/tde-editor).
+2. Review the properties in marklogic/gradle.properties. If needed create a gradle-{env}.properties file to override
+   them. (Example: you want to use a different port in your local laptop. Create marklogic/gradle-local.properties,
+   copy the `appPort` property, and give it the new value.)
+3. `cd ui`, then `npm install`. This will download the dependencies used by the UI.
+4. Still from the `ui` directory, run `npm run build`. This will gather the files needed for the UI and get them ready
+   for MarkLogic to use.
+
+### Deploy to MarkLogic
+
+The TDE Editor is an application that runs in MarkLogic. The default configuration will deploy it with an app server
+using port 8003. If you want to deploy to multiple environemnts (or different Docker containers on your laptop), do
+these steps once for each MarkLogic environment.
+
+Starting at the project root directory:
+
+1. `cd marklogic`
+2. `./gradlew mlDeploy -i -PenvironmentName=local`
+3. Point your browser to http://localhost:8003.
+
 ## Using the Editor
 
 After deploying, the editor is available at http://localhost:8003.
