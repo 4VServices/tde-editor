@@ -7,7 +7,7 @@
   "error-handler": "",
   "url-rewriter": "/rewriter.xml",
   "rewrite-resolves-globally": false,
-  "content-database": "%%DATABASE%%",
+  "content-database": "Documents",
   "modules-database": "%%MODULES_DATABASE%%",
   "authentication": "application-level",  
   "default-user": "admin"
