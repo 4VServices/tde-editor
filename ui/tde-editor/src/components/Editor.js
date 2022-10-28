@@ -10,6 +10,7 @@ import { buildAuthHeaders } from '../apis/buildAuthHeader';
 import { getTemplate, getTemplates, templateExtract, templateInsert, templateValidate } from '../apis/templates';
 import { FlexBox } from './Box';
 import { notification } from 'antd';
+import fileDownload from 'js-file-download';
 
 function defaultTemplate() {
   return {
@@ -240,6 +241,15 @@ const Editor = (props) => {
     }
   };
 
+  const handleExport = () => {
+    let match = selectedTemplateURI.match(/[^\/]+$/);
+    let filename = null;
+    if (match) {
+      filename = match[0];
+    }
+    fileDownload(JSON.stringify(templateJSON, null, 2), filename ? filename : 'template.json');
+  };
+
   useEffect(() => {
     const fn = async () => {
       const data = await getDatabases().catch((error) => {
@@ -267,6 +277,7 @@ const Editor = (props) => {
           onTemplateInsert={handleTemplateInsert}
           selectedTemplateURI={selectedTemplateURI}
           handleValidate={handleValidate}
+          handleExport={handleExport}
         ></Menu>
       </div>
       <div className="right">

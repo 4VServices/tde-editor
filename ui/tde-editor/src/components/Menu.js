@@ -13,7 +13,8 @@ const Menu = ({
   onTemplateExtract,
   onContentDbSelected,
   onTemplateSelected,
-  handleValidate
+  handleValidate,
+  handleExport
 }) => {
   const handleMenuSelect = (dbName, event) => {
     onContentDbSelected(dbName);
@@ -22,10 +23,6 @@ const Menu = ({
   const handleTemplateSelect = (template, event) => {
     onTemplateSelected(template);
     console.log(`handleTemplateSelect: ${JSON.stringify(template)}`);
-  };
-
-  const handleExport = () => {
-    console.log('handleExport');
   };
 
   return (
@@ -52,7 +49,7 @@ const Menu = ({
         <Button onClick={onTemplateInsert} block type="primary">
           Insert
         </Button>
-        <Button onClick={handleExport} block type="primary">
+        <Button onClick={() => handleExport()} block type="primary">
           Export
         </Button>
         <Button onClick={handleValidate} block type="primary">
