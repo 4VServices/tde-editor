@@ -127,7 +127,7 @@ const Editor = (props) => {
 
   const handleVarAdd = () => {
     let template = templateJSON;
-    template.template.vars = [...template.template.vars, { name: '', val: '' }];
+    template.template.vars = [...(template.template.vars ? template.template.vars : []), { name: '', val: '' }];
     setTemplateJSON({ ...template });
   };
 
@@ -152,7 +152,10 @@ const Editor = (props) => {
 
   const handleViewAdd = () => {
     let template = templateJSON;
-    template.template.rows = [...template.template.rows, { viewLayout: 'sparse' }];
+    template.template.rows = [
+      ...(templateJSON.template.rows ? templateJSON.template.rows : []),
+      { viewLayout: 'sparse' }
+    ];
     setTemplateJSON({ ...template });
   };
 
