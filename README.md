@@ -24,7 +24,9 @@ You'll do these steps once.
    them. (Example: you want to use a different port in your local laptop. Create marklogic/gradle-local.properties,
    copy the `appPort` property, and give it the new value.)
 3. `cd ui`, then `npm install`. This will download the dependencies used by the UI.
-4. Still from the `ui` directory, run `npm run build`. This will gather the files needed for the UI and get them ready
+4. Create a file named `.env` inside the `ui` directory, copy the content from `.env.example` and change the values
+   if necessary
+5. Still from the `ui` directory, run `npm run build`. This will gather the files needed for the UI and get them ready
    for MarkLogic to use.
 
 ### Deploy to MarkLogic
