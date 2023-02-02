@@ -1,7 +1,5 @@
-const requestMethod = xdmp.getRequestMethod();
-const body = JSON.parse(xdmp.getRequestBody('json'));
-
-function post() {
+function post(context, params, input) {
+  const body = input;
   if (!body || !body.username || !body.password) {
     fn.error(
       xs.QName('ERROR'),
@@ -22,11 +20,11 @@ function post() {
   }
 }
 
-function methodNotImplemented() {
+function methodNotImplemented(context, params, input) {
   xdmp.setResponseCode(405, 'Blobs Method Not Allowed Bb');
 }
 
 exports.POST = post;
-exports.GET = methodNotImplemented;
-exports.PUT = methodNotImplemented;
-exports.DELETE = methodNotImplemented;
+// exports.GET = methodNotImplemented;
+// exports.PUT = methodNotImplemented;
+// exports.DELETE = methodNotImplemented;
