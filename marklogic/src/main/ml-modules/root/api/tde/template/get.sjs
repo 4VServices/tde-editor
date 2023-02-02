@@ -1,8 +1,14 @@
-'use strict';
+const runModule = require('/lib/helpers/runModule.sjs');
 
-const contentDB = xdmp.getRequestField('contentDB');
-const templateURI = xdmp.getRequestField('templateURI');
+function getTemplate() {
+  const contentDB = xdmp.getRequestField('contentDB');
+  const templateURI = xdmp.getRequestField('templateURI');
 
-xdmp.invokeFunction(() => cts.doc(templateURI), {
-  database: xdmp.schemaDatabase(xdmp.database(contentDB)),
+  return xdmp.invokeFunction(() => cts.doc(templateURI), {
+    database: xdmp.schemaDatabase(xdmp.database(contentDB))
+  });
+}
+
+runModule(getTemplate, {
+  protected: true
 });

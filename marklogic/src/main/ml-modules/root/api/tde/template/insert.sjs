@@ -1,8 +1,8 @@
 const tde = require('/MarkLogic/tde.xqy');
 
-const requestMethod = xdmp.getRequestMethod();
+const runModule = require('/lib/helpers/runModule.sjs');
 
-if (requestMethod === 'POST') {
+function insertTemplate() {
   const template = xdmp.getRequestBody();
   const validation = tde.validate([template]);
   let result = null;
@@ -17,7 +17,10 @@ if (requestMethod === 'POST') {
     result = validation;
   }
 
-  result;
-} else {
-  xdmp.setResponseCode(405, 'Method Not Allowed');
+  return result;
 }
+
+runModule(insertTemplate, {
+  protected: true,
+  allowedMethods: 'post'
+});

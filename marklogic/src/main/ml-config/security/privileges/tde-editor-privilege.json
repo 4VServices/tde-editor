@@ -1,0 +1,5 @@
+{
+  "privilege-name": "tde-editor-privilege",
+  "action": "/tde-editor-privilege",
+  "kind": "execute"
+}
