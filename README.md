@@ -41,6 +41,8 @@ Starting at the project root directory:
 2. `./gradlew mlDeploy -i -PenvironmentName=local`
 3. Point your browser to http://localhost:8003.
 
+Note that the `build.ps1` script in the project root will build the UI files and deploy them to your local MarkLogic.
+
 ## Using the Editor
 
 After deploying, the editor is available at http://localhost:8003.
@@ -55,6 +57,18 @@ The brief version:
 - The Validation button will check whether your template is valid.
 - The Extract button will use your template to extract data from the Sample Documents you have selected and display
   the results in the form.
+
+### Permissions
+
+The TDE Editor comes with two roles: a "nobody" role and a "standard" role. The "nobody" role has just enough
+privileges and permissions to get you to the login screen. To use the editor, you will need a user that has at least
+two other roles:
+
+1. `tde-editor-standard-role`. Having this role will grant you access to the TDE Template Editor's functionality.
+2. A role that grants access to the TDE templates and document you want to work with. This will be specific to the
+   application you are working on. At minimum, you will need `read` and `update` access to any existing templates (or
+   sufficient privileges to create new ones). You will also need `read` permissions for any documents in your content
+   database that you'd like to test your templates against.
 
 ## Developers
 
@@ -98,3 +112,17 @@ script does this.
 
 Once the above steps have been done, you point your browser to http://localhost:8003 (change the port if your overrode
 in your gradle-local.properties file).
+
+### Alternative Deployment
+
+The build-and-deploy cycle is a bit long when doing UI development. To simplify, we run the UI from the UI directory
+and have it talk to MarkLogic. The challenge with this is that we run into CORS problems, since the UI needs to talk
+directly to MarkLogic, which is not where the browser gets the code from.
+
+**Note: This plugin is a security risk and will interfere with regular browsing. You should only use it while doing
+this development, then disable it.**
+
+There is a Chrome plugin called "Allow CORS: Access-Control-Allow-Origin" that gets past this problem. To use it,
+first install it in your browser. You should now see it by clicking on the Extension icon in the upper right. Click on
+the extension, which will bring up a small panel. On the left side of the panel, make sure the extension is toggled on.
+You may need to click on the "C..." icon on the left side of the panel.
