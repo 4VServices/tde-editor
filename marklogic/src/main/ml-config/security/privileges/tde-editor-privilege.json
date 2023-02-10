@@ -1,5 +1,5 @@
 {
   "privilege-name": "tde-editor-privilege",
-  "action": "/tde-editor-privilege",
+  "action": "http://4VServices.com/tde-editor-privilege",
   "kind": "execute"
 }

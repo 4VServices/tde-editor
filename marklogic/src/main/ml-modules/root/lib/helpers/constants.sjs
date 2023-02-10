@@ -1,3 +1,3 @@
 module.exports = {
-  AUTHENTICATED_PRIVILEGE: '/tde-editor-privilege'
+  AUTHENTICATED_PRIVILEGE: 'http://4VServices.com/tde-editor-privilege'
 };

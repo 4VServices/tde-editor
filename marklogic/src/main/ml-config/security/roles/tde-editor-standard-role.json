@@ -1,13 +1,10 @@
 {
   "role-name": "tde-editor-standard-role",
   "description": "Can read and write documents",
-  "role": [
-    "tde-editor-reader"
-  ],
   "privilege": [
     {
       "privilege-name": "tde-editor-privilege",
-      "action": "/tde-editor-privilege",
+      "action": "http://4VServices.com/tde-editor-privilege",
       "kind": "execute"
     },
     {
