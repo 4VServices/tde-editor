@@ -113,6 +113,12 @@ script does this.
 Once the above steps have been done, you point your browser to http://localhost:8003 (change the port if your overrode
 in your gradle-local.properties file).
 
+### Example Project
+
+For a working example of how to use the TDE Editor, deploy the examples/soccer project. You can then log into the TDE
+Editor as "soccer-admin" (password "soccer-admin") and you'll be able to work with the sample template defined in that
+project.
+
 ### Alternative Deployment
 
 The build-and-deploy cycle is a bit long when doing UI development. To simplify, we run the UI from the UI directory
