@@ -261,7 +261,9 @@ const Editor = (props) => {
         setError(error);
       });
       setLoaded(true);
-      setContentDBs(data);
+      if (data) {
+        setContentDBs(data);
+      }
     };
 
     fn();
