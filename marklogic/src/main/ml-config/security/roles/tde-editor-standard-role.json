@@ -1,6 +1,7 @@
 {
   "role-name": "tde-editor-standard-role",
   "description": "Can read and write documents",
+  "role": ["tde-view", "tde-admin"],
   "privilege": [
     {
       "privilege-name": "tde-editor-privilege",
