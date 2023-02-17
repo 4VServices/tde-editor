@@ -1,0 +1,5 @@
+{
+  "user-name": "soccer-admin",
+  "password": "soccer-admin",
+  "role": ["soccer-admin", "tde-editor-standard-role"]
+}
