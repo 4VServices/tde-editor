@@ -1,55 +1,27 @@
-import Editor from './components/Editor';
-import styled from 'styled-components';
-import { FlexBox } from './components/Box';
-import { H1, H3 } from './components/common';
-import logo from './logo.png';
+import { Suspense, lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { UserProvider } from 'contexts/UserContext';
+import { UnAuthedRoute } from 'routes/UnAuthedRoute';
+import { AuthedRoute } from 'routes/AuthedRoute';
 import './style.css';
 
-const Container = styled.div`
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-
-  .left {
-    width: 220px;
-    min-width: 220px;
-  }
-  .right {
-    flex-grow: 1;
-    overflow-x: hidden;
-  }
-`;
-
-const Img = styled.img`
-  height: 10vmin;
-  pointer-events: none;
-`;
+const LoginPage = lazy(() => import('pages/login/index'));
+const EditorPage = lazy(() => import('pages/editor/index'));
 
 function App() {
   return (
-    <div className="App">
-      <Container>
-        <FlexBox width="100%" gap="2rem" margin="2rem 0">
-          <div className="left">
-            <FlexBox justifyContent="space-between">
-              <Img src={logo} className="App-logo" alt="logo" />
-            </FlexBox>
-          </div>
-          <div className="right">
-            <FlexBox justifyContent="space-between">
-              <H1>TDE Template Editor</H1>
-              <H3>
-                Built by <a href="http://4VServices.com">4V Services</a>
-              </H3>
-            </FlexBox>
-          </div>
-        </FlexBox>
-
-        <FlexBox width="100%">
-          <Editor />
-        </FlexBox>
-      </Container>
-    </div>
+    <UserProvider>
+      <Suspense fallback={<div></div>}>
+        <Routes>
+          <Route path="/" element={<AuthedRoute />}>
+            <Route path="/" element={<EditorPage />} />
+          </Route>
+          <Route path="/" element={<UnAuthedRoute />}>
+            <Route path="/login" element={<LoginPage />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </UserProvider>
   );
 }
 
