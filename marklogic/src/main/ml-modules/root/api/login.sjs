@@ -1,5 +1,6 @@
 const errorResponse = require('/lib/helpers/errorResponse.sjs');
 const runModule = require('/lib/helpers/runModule.sjs');
+const { AUTHENTICATED_PRIVILEGE } = require('/lib/helpers/constants.sjs');
 
 function login() {
   let body;
@@ -20,6 +21,11 @@ function login() {
 
   if (!login) {
     return errorResponse(403, 'Forbidden', 'Login failed');
+  } else {
+    return {
+      isAuthenticated: xdmp.hasPrivilege(AUTHENTICATED_PRIVILEGE, 'execute'),
+      username: xdmp.getCurrentUser()
+    };
   }
 }
 
