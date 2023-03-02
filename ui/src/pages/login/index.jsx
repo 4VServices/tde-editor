@@ -3,34 +3,33 @@ import { login } from 'apis/user';
 import useUser from 'hooks/useUser';
 import { Button, Typography, Form, Input } from 'antd';
 import styled from 'styled-components';
+import { FlexBox } from 'components/Box';
 const { Text } = Typography;
 
 const Root = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  padding-top: 25vh;
   min-height: 100vh;
+  background-color: #f2f2ee;
 `;
 
 const LoginPage = () => {
   const [error, setError] = useState();
   const { setUser } = useUser();
 
-  const onFinish = async (values) => {
-    console.log('Success:', values);
+  const onFinish = useCallback(async (values) => {
     setError(false);
     try {
       const res = await login({ username: values.username, password: values.password });
-      if (res.status === 200) setUser({ isAuthenticated: true });
+      if (res.data) setUser(res.data);
     } catch (e) {
       setError(true);
       console.log('login error:', e);
     }
-  };
+  }, [setUser]);
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   const handleChange = useCallback(() => {
     setError(false);
@@ -40,9 +39,8 @@ const LoginPage = () => {
     <Root>
       <Form
         name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
+        layout="vertical"
+        style={{ maxWidth: 600, minWidth: 280 }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={handleChange}
@@ -64,15 +62,19 @@ const LoginPage = () => {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Login
-          </Button>
+        <Form.Item>
+          <FlexBox justifyContent="center">
+            <Button type="primary" htmlType="submit">
+              Login
+            </Button>
+          </FlexBox>
         </Form.Item>
 
         {error && (
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Text type="danger">Something went wrong</Text>
+          <Form.Item>
+            <FlexBox justifyContent="center">
+              <Text type="danger">Something went wrong</Text>
+            </FlexBox>
           </Form.Item>
         )}
       </Form>
