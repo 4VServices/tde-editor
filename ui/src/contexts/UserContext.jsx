@@ -1,6 +1,7 @@
 import { fetchUser, logout as logoutApi } from 'apis/user';
 import React, { useEffect, useState, createContext, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { isPublicUrl } from 'utils';
 
 const UserContext = createContext();
 
@@ -25,11 +26,26 @@ const UserProvider = ({ children }) => {
   }, []);
 
   const logout = useCallback(() => {
-    logoutApi().then(() => {
-      setUser();
-      navigate('/login');
-    });
+    logoutApi()
+      .then(() => {})
+      .finally(() => {
+        setUser();
+        navigate('/login');
+      });
   }, [navigate]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (isPublicUrl(location.pathname)) {
+        return;
+      }
+      const res = await fetchUser();
+      if (!res.data?.isAuthenticated) {
+        logout();
+      }
+    }, 60000); // check auth every 60 seconds and if unauthed, redirect to login page
+    return () => clearInterval(interval);
+  }, [location, logout, user]);
 
   const value = useMemo(
     () => ({

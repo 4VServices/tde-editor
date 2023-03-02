@@ -45,7 +45,7 @@ const EditorPage = () => {
               </FlexBox>
               <FlexBox gap="1rem">
                 <B2Med>{user.username}</B2Med>
-                <Button type="link" onClick={logout} icon={<LogoutOutlined />}>
+                <Button type="link" danger onClick={logout} icon={<LogoutOutlined />}>
                   Logout
                 </Button>
               </FlexBox>
