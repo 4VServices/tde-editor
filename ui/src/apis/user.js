@@ -23,7 +23,7 @@ export const fetchUser = async () => {
 
 export const logout = async () => {
   return axios.request({
-    url: `${process.env.REACT_APP_API_URL || ''}/status`,
+    url: `${process.env.REACT_APP_API_URL || ''}/logout`,
     headers: buildAuthHeaders(),
     method: 'post'
   });
