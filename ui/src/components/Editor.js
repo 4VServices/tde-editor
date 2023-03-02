@@ -285,7 +285,7 @@ const Editor = (props) => {
           handleExport={handleExport}
         ></Menu>
       </div>
-      <div className="right">
+      <div className="right" style={{ overflowY: 'auto' }}>
         <FlexBox alignItems="stretch" flexDirection="column" gap="2rem">
           <Template
             templateURI={selectedTemplateURI}
