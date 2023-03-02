@@ -40,7 +40,9 @@ const EditorPage = () => {
           <FlexBox justifyContent="space-between">
             <H1>TDE Template Editor</H1>
             <H3>
-              Built by <a href="http://4VServices.com">4V Services</a>
+              <FlexBox justifyContent="flex-end">
+                Built by <a href="http://4VServices.com">4V Services</a>
+              </FlexBox>
               <FlexBox gap="1rem">
                 <B2Med>{user.username}</B2Med>
                 <Button type="link" onClick={logout} icon={<LogoutOutlined />}>
