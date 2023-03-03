@@ -39,7 +39,6 @@ function insertTemplate() {
     };
   } else if (validation.valid === true) {
     // Good template, good parameters. Do the insert in the correct database.
-    xdmp.log(`insert.sjs; ready to insert template. verifiedParams=${JSON.stringify(verifiedParams)}`);
     xdmp.invokeFunction(
       () => {
         tde.templateInsert(verifiedParams.params.uri.value, xdmp.toJSON(template));
