@@ -1,0 +1,22 @@
+{
+  "role-name": "tde-editor-standard-role",
+  "description": "Can read and write documents",
+  "role": ["tde-view", "tde-admin"],
+  "privilege": [
+    {
+      "privilege-name": "tde-editor-privilege",
+      "action": "http://4VServices.com/tde-editor-privilege",
+      "kind": "execute"
+    },
+    {
+      "privilege-name": "xdmp-invoke",
+      "action": "http://marklogic.com/xdmp/privileges/xdmp-invoke",
+      "kind": "execute"
+    },
+    {
+      "privilege-name": "xdmp-invoke-in",
+      "action": "http://marklogic.com/xdmp/privileges/xdmp-invoke-in",
+      "kind": "execute"
+    }
+  ]
+}

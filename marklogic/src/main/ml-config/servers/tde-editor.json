@@ -1,0 +1,15 @@
+{
+  "server-name": "%%mlAppName%%",
+  "group-name": "Default",
+  "server-type": "http",
+  "root": "/",
+  "port": "%%appPort%%",
+  "error-handler": "",
+  "url-rewriter": "/rewriter.xml",
+  "rewrite-resolves-globally": false,
+  "content-database": "Documents",
+  "log-errors": true,
+  "modules-database": "%%MODULES_DATABASE%%",
+  "authentication": "application-level",
+  "default-user": "tde-editor-nobody"
+}

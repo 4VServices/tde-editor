@@ -57,14 +57,14 @@ export const templateExtract = async (uriParam, contentDb, data) => {
   }
 };
 
-export const templateInsert = async (templateURI, data) => {
+export const templateInsert = async (templateURI, contentDb, data) => {
   let headers = buildAuthHeaders();
   //   headers.append('Content-Type', 'application/json');
   try {
     const res = await axios.request({
       method: 'POST',
       headers: headers,
-      url: `${process.env.REACT_APP_API_URL || ''}/tde/template/insert?uri=${templateURI}`,
+      url: `${process.env.REACT_APP_API_URL || ''}/tde/template/insert?uri=${templateURI}&contentDB=${contentDb}`,
       data
     });
     return res.data;

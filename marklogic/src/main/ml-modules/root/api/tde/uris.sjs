@@ -1,14 +1,20 @@
-const tde = require('/MarkLogic/tde.xqy');
-const template = xdmp.getRequestBody();
+const errorResponse = require('/lib/helpers/errorResponse.sjs');
+const runModule = require('/lib/helpers/runModule.sjs');
 
-let page = xdmp.getRequestField('page');
-let pageSize = xdmp.getRequestField('pageSize');
-let finalCollectionsQuery;
+function getUris() {
+  const template = xdmp.getRequestBody();
 
-page = page === null ? 1 : page;
-pageSize = pageSize === null ? 20 : pageSize;
+  if (template === undefined || template === null || fn.empty(template)) {
+    return errorResponse(400, 'MISSING-BODY', 'Template is a required text in the body');
+  }
 
-if (template !== undefined && template !== null && !fn.empty(template)) {
+  let page = xdmp.getRequestField('page');
+  let pageSize = xdmp.getRequestField('pageSize');
+  let finalCollectionsQuery;
+
+  page = page === null ? 1 : page;
+  pageSize = pageSize === null ? 20 : pageSize;
+
   let templateObj = xdmp.toJSON(template).toObject().template,
     collections = templateObj.collections,
     directories = templateObj.directories;
@@ -26,15 +32,15 @@ if (template !== undefined && template !== null && !fn.empty(template)) {
   if (directories !== undefined && directories !== null && !fn.empty(directories)) {
     finalDirectoryQuery = cts.directoryQuery(directories, 'infinity');
   }
-  cts.uris(
+
+  return cts.uris(
     '',
     ['map', 'skip=' + (page - 1) * pageSize, 'truncate=' + pageSize],
     cts.andQuery([finalCollectionsQuery, finalDirectoryQuery])
   );
-} else {
-  fn.error(
-    xs.QName('ERROR'),
-    'API-SRVEXERR',
-    Sequence.from([400, 'MISSING-BODY', 'Template is a required text in the body'])
-  );
 }
+
+runModule(getUris, {
+  allowedMethods: 'get',
+  protected: true
+});
