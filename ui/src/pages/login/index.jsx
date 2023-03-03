@@ -81,6 +81,10 @@ const LoginPage = () => {
         onValuesChange={handleChange}
         autoComplete="on"
       >
+        <Form.Item>
+          <p>Log in with a user that has the 'tde-editor-standard-role'</p>
+        </Form.Item>
+
         <Form.Item
           label="Username"
           name="username"
