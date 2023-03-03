@@ -226,18 +226,26 @@ const Editor = (props) => {
     const confirm = window.confirm('Inserting the template may cause reindexing. Proceed?');
     if (confirm) {
       try {
-        const result = await templateInsert(selectedTemplateURI, templateJSON);
+        const result = await templateInsert(selectedTemplateURI, selectedContentDb, templateJSON);
         if (result.valid) {
           notification.success({
             message: 'Insert',
             description: 'Insert succeeded'
           });
         } else {
+          notification.error({
+            message: 'Insert',
+            description: result.message
+          });
           setLoaded(true);
           setError(result.message);
         }
       } catch (error) {
         console.log(`insert call failed: ${error}`);
+        notification.error({
+          message: 'Insert',
+          description: `insert call failed: ${error}`
+        });
         setLoaded(true);
         setError(error);
       }
