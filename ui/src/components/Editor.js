@@ -102,6 +102,15 @@ const Editor = (props) => {
     }
   };
 
+  const handleTripleAdd = () => {
+    let template = templateJSON;
+    template.template.triples = [
+      ...(template.template.triples ? template.template.triples : []),
+      { subject: { val: '' }, predicate: { val: '' }, object: { val: '' } }
+    ];
+    setTemplateJSON({ ...template });
+  };
+
   const handleTripleChange = (tripleIndex, changedTriple) => {
     let template = templateJSON;
     template.template.triples = template.template.triples.map((triple, index) => {
@@ -232,6 +241,10 @@ const Editor = (props) => {
             message: 'Insert',
             description: 'Insert succeeded'
           });
+          // If this is a new template, add it to the list of known templates once insert succeeds
+          if (!templates.some((item) => item.uri === selectedTemplateURI)) {
+            setTemplates([...templates, { uri: selectedTemplateURI, enabled: true }]);
+          }
         } else {
           notification.error({
             message: 'Insert',
@@ -328,6 +341,7 @@ const Editor = (props) => {
             triplesSpec={templateJSON.template.triples}
             extractedData={extractedData}
             onTripleChange={handleTripleChange}
+            onTripleAdd={handleTripleAdd}
           />
         </FlexBox>
       </div>
