@@ -54,12 +54,9 @@ const Editor = (props) => {
     setTemplateJSON(data);
   };
 
+  // Template Management (start)
   const handleURIChange = (templateURI) => {
     setSelectedTemplateURI(templateURI);
-  };
-
-  const addURI = (contentURI) => {
-    setSampleURIs(sampleURIs.concat(contentURI));
   };
 
   const handleDescriptionChange = (description) => {
@@ -79,7 +76,13 @@ const Editor = (props) => {
     template.template.collections = [collection];
     setTemplateJSON(template);
   };
+  // Template Management (end)
 
+  const addURI = (contentURI) => {
+    setSampleURIs(sampleURIs.concat(contentURI));
+  };
+
+  // View management (start)
   const handleViewChange = (viewIndex, changedView) => {
     let template = templateJSON;
     template.template.rows = template.template.rows.map((view, index) => {
@@ -102,6 +105,17 @@ const Editor = (props) => {
     }
   };
 
+  const handleViewAdd = () => {
+    let template = templateJSON;
+    template.template.rows = [
+      ...(templateJSON.template.rows ? templateJSON.template.rows : []),
+      { viewLayout: 'sparse' }
+    ];
+    setTemplateJSON({ ...template });
+  };
+  // View management (end)
+
+  // Triples management (start)
   const handleTripleChange = (tripleIndex, changedTriple) => {
     let template = templateJSON;
     template.template.triples = template.template.triples.map((triple, index) => {
@@ -112,7 +126,9 @@ const Editor = (props) => {
     });
     setTemplateJSON({ ...template });
   };
+  // Triples management (end)
 
+  // Variables management (start)
   const handleVarDelete = (varIndex) => {
     const confirm = window.confirm('Are you sure you want to delete?');
     if (confirm) {
@@ -160,15 +176,7 @@ const Editor = (props) => {
     });
     setTemplateJSON({ ...template });
   };
-
-  const handleViewAdd = () => {
-    let template = templateJSON;
-    template.template.rows = [
-      ...(templateJSON.template.rows ? templateJSON.template.rows : []),
-      { viewLayout: 'sparse' }
-    ];
-    setTemplateJSON({ ...template });
-  };
+  // Variables management (end)
 
   const handleValidate = async () => {
     try {
