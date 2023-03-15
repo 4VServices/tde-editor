@@ -150,6 +150,17 @@ const Editor = (props) => {
     setTemplateJSON({ ...templateJSON });
   };
 
+  const handleVarChange = (varIndex, changedVar) => {
+    let template = templateJSON;
+    template.template.vars = template.template.vars.map((currVar, index) => {
+      if (index === varIndex) {
+        return changedVar;
+      }
+      return currVar;
+    });
+    setTemplateJSON({ ...template });
+  };
+
   const handleViewAdd = () => {
     let template = templateJSON;
     template.template.rows = [
@@ -316,6 +327,7 @@ const Editor = (props) => {
             onVarDelete={handleVarDelete}
             onVarAdd={handleVarAdd}
             onVarMove={handleVarMove}
+            onVarChange={handleVarChange}
           />
           <Views
             viewsSpec={templateJSON.template.rows}

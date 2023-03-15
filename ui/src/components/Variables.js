@@ -4,7 +4,7 @@ import { Group } from './Group';
 import { Button } from './Button';
 import { FlexBox } from './Box';
 
-const Variables = ({ variables, onVarDelete, onVarAdd, onVarMove }) => {
+const Variables = ({ variables, onVarDelete, onVarAdd, onVarMove, onVarChange }) => {
   return (
     <Group title="Variables">
       <FlexBox gap="2rem" flexDirection="column" alignItems="stretch">
@@ -16,6 +16,7 @@ const Variables = ({ variables, onVarDelete, onVarAdd, onVarMove }) => {
               index={index}
               onVarDelete={onVarDelete}
               onVarMove={onVarMove}
+              onVarChange={onVarChange}
               isLast={index === variables.length - 1}
             />
           ))}
