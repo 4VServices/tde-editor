@@ -27,6 +27,24 @@ const ExtractedTriples = ({ extractedData }) => {
     return result;
   }, [extractedData]);
 
+  function displayValue(label, value) {
+    return (
+      <FlexBox gap="1rem">
+        <Label>{label}:</Label>
+        {value.datatype ? (
+          <FlexBox gap="1rem">
+            <Label>Data type:</Label>
+            <B3Reg>{value.datatype}</B3Reg>
+            <Label>Value:</Label>
+            <B3Reg>{value.value}</B3Reg>
+          </FlexBox>
+        ) : (
+          <B3Reg>{value}</B3Reg>
+        )}
+      </FlexBox>
+    );
+  }
+
   return (
     <Group title="Extracted Triples">
       {!extractedTriples.length && <div>No rows found</div>}
@@ -36,18 +54,9 @@ const ExtractedTriples = ({ extractedData }) => {
             return (
               <Group key={`${triple.object}-${index}`}>
                 <FlexBox gap="0.8rem" flexDirection="column" alignItems="stretch">
-                  <FlexBox gap="1rem">
-                    <Label>Subject:</Label>
-                    <B3Reg>{triple.subject}</B3Reg>
-                  </FlexBox>
-                  <FlexBox gap="1rem">
-                    <Label>Predicate:</Label>
-                    <B3Reg>{triple.predicate}</B3Reg>
-                  </FlexBox>
-                  <FlexBox gap="1rem" flexWrap="nowrap">
-                    <Label>Object:</Label>
-                    <B3Reg>{triple.object}</B3Reg>
-                  </FlexBox>
+                  {displayValue('Subject', triple.subject)}
+                  {displayValue('Predicate', triple.predicate)}
+                  {displayValue('Object', triple.object)}
                 </FlexBox>
               </Group>
             );
