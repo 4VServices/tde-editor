@@ -9,6 +9,12 @@ used to populate relational-style views, semantic triples, or both.
 
 [Tutorial](https://developer.marklogic.com/learn/template-driven-extraction/)
 
+## Prerequisites
+
+- MarkLogic (see the "Initial Setup" under "Developers" below to create a MarkLogic Docker container).
+- Java (instructions tested with Java 13)
+- npm (instructions tested with npm v10.2.3)
+
 ## Deploying the Editor
 
 Note that the editor is intended for use in local environments. Making changes to a template and inserting it will
@@ -32,8 +38,10 @@ You'll do these steps once.
 ### Deploy to MarkLogic
 
 The TDE Editor is an application that runs in MarkLogic. The default configuration will deploy it with an app server
-using port 8003. If you want to deploy to multiple environemnts (or different Docker containers on your laptop), do
-these steps once for each MarkLogic environment.
+using port 8003.
+
+Do the following steps to deploy TDE Editor to MarkLogic. To deploy to multiple environemnts (or different Docker
+containers on your laptop), do these steps once for each MarkLogic environment.
 
 Starting at the project root directory:
 
@@ -42,6 +50,7 @@ Starting at the project root directory:
 3. Point your browser to http://localhost:8003.
 
 Note that the `build.ps1` script in the project root will build the UI files and deploy them to your local MarkLogic.
+The `mlDeploy` command must be run before `build.ps1`.
 
 ## Using the Editor
 
@@ -57,6 +66,8 @@ The brief version:
 - The Validation button will check whether your template is valid.
 - The Extract button will use your template to extract data from the Sample Documents you have selected and display
   the results in the form.
+
+See "Example Project" below to deploy an example to work with.
 
 ### Permissions
 
@@ -82,26 +93,25 @@ or create a marklogic/gradle-local.properties file with an `appPort` property id
 instead.
 
 You can create a Docker container holding MarkLogic using the following command or you can install MarkLogic locally.
+You can use whatever username and password you want for the admin; for local development, `admin`/`admin` is common.
 
 ```
-docker run -d --name=tde-editor -p 8000-8020:8000-8020 \
-  -e MARKLOGIC_INIT=true \
-  -e MARKLOGIC_ADMIN_USERNAME={insert admin username} \
-  -e MARKLOGIC_ADMIN_PASSWORD={insert admin password} \
-  marklogicdb/marklogic-db:10.0-9.1-centos-1.0.0-ea4
+docker run -d --name=tde-editor -p 8000-8020:8000-8020 `
+  -e MARKLOGIC_INIT=true `
+  -e MARKLOGIC_ADMIN_USERNAME={insert admin username} `
+  -e MARKLOGIC_ADMIN_PASSWORD={insert admin password} `
+  progressofficial/marklogic-db:11.3.1-ubi9-2.1.0
 ```
 
-Once MarkLogic is ready, deploy the application:
+MarkLogic will take a few minutes to initialize. When it is done, you will be able to log into http://localhost:8001
+using the admin credentials you specified in the docker run command.
+
+Once MarkLogic is ready, deploy the application. Starting from the directory where you cloned the tde-editor project:
 
 ```
 cd marklogic
 ./gradlew mlDeploy -i
 ```
-
-To load some sample data and a sample TDE Template, add `mlDataLoadingEnabled=true` to your gradle-local.properties
-file, then run `./gradlew mlLoadData`. Note that sample data will go into your Documents database.
-
-Run `./gradlew mlLoadSchemas` to load the sample TDE Template. This will go into your Schemas database.
 
 ### Deploying the UI
 
@@ -118,6 +128,12 @@ in your gradle-local.properties file).
 For a working example of how to use the TDE Editor, deploy the examples/soccer project. You can then log into the TDE
 Editor as "soccer-admin" (password "soccer-admin") and you'll be able to work with the sample template defined in that
 project.
+
+From the project root:
+
+1. `cd examples/soccer`
+2. `./gradlew mlDeploy -i`
+3. Point browser to http://localhost:8003 and log in with `soccer-admin`/`soccer-admin`.
 
 ### Alternative Deployment
 
