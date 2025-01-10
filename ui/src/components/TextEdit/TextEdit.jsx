@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Input, InputNumber } from 'antd';
 import styled from 'styled-components';
 import { Label } from 'components/common';
-import TextArea from 'antd/lib/input/TextArea';
+// import TextArea from 'antd/lib/input/TextArea';
 
 const Root = styled.div`
   width: ${(props) => (props.fullWidth ? '100%' : props.width || 'auto')};
@@ -32,6 +32,7 @@ export const TextEdit = ({
 
   useEffect(() => {
     setLocalValue(value);
+    console.log(`TextEdit; local value for ${label} is ${value}`);
     if (type === 'number' && value !== undefined && value !== null) {
       const vv = parseFloat(value);
       if (value !== vv) {
@@ -82,7 +83,7 @@ export const TextEdit = ({
     <Root fullWidth={fullWidth} width={width} style={rootStyle}>
       {label && <Label required={required}>{label}</Label>}
       {type === 'textarea' ? (
-        <TextArea
+        <Input.TextArea
           rows={rows || 3}
           value={localValue}
           onChange={handleChangeInput}
