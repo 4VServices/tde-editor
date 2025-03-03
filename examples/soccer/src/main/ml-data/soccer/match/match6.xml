@@ -1,0 +1,14 @@
+<match>
+  <id>6</id>
+  <match-date>2025-02-27</match-date>
+  <league>MLS</league>
+  <teams>
+    <home>Philadelphia</home>
+    <away>Minnesota</away>
+  </teams>
+  <score>
+    <home>5</home>
+    <away>6</away>
+  </score>
+  <abstract>Burke scores in opener</abstract>
+</match>
