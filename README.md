@@ -49,8 +49,8 @@ Starting at the project root directory:
 2. `./gradlew mlDeploy -i -PenvironmentName=local`
 3. Point your browser to http://localhost:8003.
 
-Note that the `build.ps1` script in the project root will build the UI files and deploy them to your local MarkLogic.
-The `mlDeploy` command must be run before `build.ps1`.
+Note that the `build.ps1` or `build.sh` script in the project root will build the UI files and deploy them to your local MarkLogic.
+The `mlDeploy` command must be run before `build.ps1` or `build.sh`.
 
 ## Using the Editor
 
