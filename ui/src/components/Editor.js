@@ -16,7 +16,8 @@ function defaultTemplate() {
   return {
     template: {
       context: '',
-      collections: []
+      collections: [],
+      directories: []
     }
   };
 }
@@ -74,6 +75,12 @@ const Editor = (props) => {
   const handleCollectionChange = (collection) => {
     let template = templateJSON;
     template.template.collections = [collection];
+    setTemplateJSON(template);
+  };
+
+  const handleDirectoryChange = (directory) => {
+    let template = templateJSON;
+    template.template.directories = [directory];
     setTemplateJSON(template);
   };
   // Template Management (end)
@@ -331,17 +338,20 @@ const Editor = (props) => {
             templateURI={selectedTemplateURI}
             context={templateJSON.template.context}
             collection={templateJSON.template.collections}
+            directory={templateJSON.template.directories}
             description={templateJSON.template.description}
             handleURIChange={handleURIChange}
             handleDescriptionChange={handleDescriptionChange}
             handleContextChange={handleContextChange}
             handleCollectionChange={handleCollectionChange}
+            handleDirectoryChange={handleDirectoryChange}
           />
           <SampleDocs
             uris={sampleURIs}
             addURI={addURI}
             authHeaders={buildAuthHeaders()}
             contentDB={selectedContentDb}
+            template={templateJSON}
           />
           <Variables
             variables={templateJSON.template.vars}
