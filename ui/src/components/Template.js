@@ -10,6 +10,8 @@ const Template = ({
   description,
   handleCollectionChange,
   collection,
+  handleDirectoryChange,
+  directory,
   handleContextChange,
   context
 }) => {
@@ -19,7 +21,7 @@ const Template = ({
         <TextEdit label="URI" value={templateURI} onChangeDebounced={handleURIChange} />
         <TextEdit label="Description" type="textarea" rows={3} value={description} onChange={handleDescriptionChange} />
         <TextEdit label="Collection" value={collection} onChange={handleCollectionChange} />
-        <TextEdit label="Directory" placeholder={''} onChange={() => {}} />
+        <TextEdit label="Directory" value={directory} onChange={handleDirectoryChange} />
         <TextEdit label="Context" value={context} onChange={handleContextChange} />
       </FlexBox>
     </Group>
