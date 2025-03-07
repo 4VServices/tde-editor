@@ -23,12 +23,27 @@ const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
       method: 'GET',
       headers: authHeaders
     })
-      .then((res) => res.json())
+      .then((res) => {
+        const contentType = res.headers.get('content-type');
+
+        if (contentType.includes('application/json')) {
+          return res.json().then((jsonResult) => ({
+            type: 'json',
+            data: JSON.stringify(jsonResult, null, 2)
+          }));
+        } else if (contentType.includes('application/xml') || contentType.includes('text/xml')) {
+          return res.text().then((xmlText) => ({
+            type: 'xml',
+            data: formatXml(xmlText)
+          }));
+        } else {
+          throw new Error('Unsupported content type');
+        }
+      })
       .then(
         (result) => {
           console.log('/api/document call succeeded');
-          // TODO: handle XML content
-          setCurrentViewedDoc(JSON.stringify(result, null, 2));
+          setCurrentViewedDoc(result.data);
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -38,6 +53,14 @@ const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
           setCurrentViewedDoc(`Unable to load ${uri}`);
         }
       );
+  };
+
+// Helper function to format XML for better readability
+  const formatXml = (xml) => {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml, 'application/xml');
+    const serializer = new XMLSerializer();
+    return serializer.serializeToString(xmlDoc);
   };
 
   return (
