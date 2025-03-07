@@ -71,9 +71,10 @@ const Editor = (props) => {
     setTemplateJSON(template);
   };
 
-  const handleCollectionChange = (collection) => {
+  const handleCollectionChange = (collections) => {
+    console.log(`handleCollectionChange: collections=${collections}`);
     let template = templateJSON;
-    template.template.collections = [collection];
+    template.template.collections = collections;
     setTemplateJSON(template);
   };
   // Template Management (end)
@@ -334,7 +335,7 @@ const Editor = (props) => {
           <Template
             templateURI={selectedTemplateURI}
             context={templateJSON.template.context}
-            collection={templateJSON.template.collections}
+            collections={templateJSON.template.collections}
             description={templateJSON.template.description}
             handleURIChange={handleURIChange}
             handleDescriptionChange={handleDescriptionChange}
