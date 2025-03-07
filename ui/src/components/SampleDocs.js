@@ -4,17 +4,27 @@ import { FlexBox } from './Box';
 import { TextEdit } from './TextEdit';
 import { Button } from './Button';
 
-const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
+const SampleDocs = ({ uris, addURI, removeURI, contentDB, authHeaders }) => {
   const [currentURI, setCurrentURI] = useState('');
   const [currentViewedDoc, setCurrentViewedDoc] = useState('');
+  const [currentViewedURI, setCurrentViewedURI] = useState('');
 
   const handleURIChange = (uri) => {
     setCurrentURI(uri);
   };
 
   const handleAddURI = () => {
-    addURI(currentURI);
-    setCurrentURI('');
+    if (currentURI !== '') {
+      addURI(currentURI);
+      setCurrentURI('');
+    }
+  };
+
+  const handleRemoveURI = (uri) => {
+    removeURI(uri); // Remove the URI from the list
+    if (currentViewedURI === uri) {
+      setCurrentViewedDoc('');
+    }
   };
 
   const viewDoc = (uri) => {
@@ -44,6 +54,7 @@ const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
         (result) => {
           console.log('/api/document call succeeded');
           setCurrentViewedDoc(result.data);
+          setCurrentViewedURI(uri);
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -72,9 +83,11 @@ const SampleDocs = ({ uris, addURI, contentDB, authHeaders }) => {
         </FlexBox>
         {uris.map((uri) => (
           <FlexBox key={uri} gap="1rem" alignItems="flex-end">
-            <TextEdit label="URI" value={uri} onChange={() => {}} rootStyle={{ flexGrow: 1 }} />
+            <TextEdit disabled label="URI" value={uri} onChange={() => {}} rootStyle={{ flexGrow: 1 }} />
             <Button onClick={(e) => viewDoc(uri)}>View</Button>
-            <Button danger>Remove</Button>
+            <Button danger onClick={(e) => handleRemoveURI(uri)}>
+              Remove
+            </Button>
           </FlexBox>
         ))}
 

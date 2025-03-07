@@ -82,6 +82,10 @@ const Editor = (props) => {
     setSampleURIs(sampleURIs.concat(contentURI));
   };
 
+  const removeURI = (contentURI) => {
+    setSampleURIs((prevURIs) => prevURIs.filter((uri) => uri !== contentURI));
+  };
+
   // View management (start)
   const handleViewChange = (viewIndex, changedView) => {
     let template = templateJSON;
@@ -340,6 +344,7 @@ const Editor = (props) => {
           <SampleDocs
             uris={sampleURIs}
             addURI={addURI}
+            removeURI={removeURI}
             authHeaders={buildAuthHeaders()}
             contentDB={selectedContentDb}
           />
