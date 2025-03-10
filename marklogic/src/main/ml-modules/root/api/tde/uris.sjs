@@ -66,11 +66,7 @@ function getUris() {
   const getTotalCount = () => {
     return xdmp.invokeFunction(
       function () {
-        return fn.count(cts.uris(
-          '',
-          ['ascending'],
-          cts.andQuery([finalCollectionsQuery, finalDirectoryQuery, finalContextQuery])
-        ));
+        return cts.estimate(cts.andQuery([finalCollectionsQuery, finalDirectoryQuery, finalContextQuery]));
       },
       { database: contentDBId }
     );
