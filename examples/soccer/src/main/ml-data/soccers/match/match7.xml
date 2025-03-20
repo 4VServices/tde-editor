@@ -1,0 +1,14 @@
+<match>
+  <id>7</id>
+  <match-date>2025-03-10</match-date>
+  <league>Premier League</league>
+  <teams>
+    <home>Manchester United</home>
+    <away>Chelsea</away>
+  </teams>
+  <score>
+    <home>2</home>
+    <away>2</away>
+  </score>
+  <abstract>Fernandes equalizes in stoppage time</abstract>
+</match>
