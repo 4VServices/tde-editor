@@ -32,6 +32,8 @@ const Editor = (props) => {
   const [extractedData, setExtractedData] = useState(null);
   const [isLoaded, setLoaded] = useState(false);
   const [error, setError] = useState();
+  const [collectionsInput, setCollectionsInput] = useState('');
+  const [directoriesInput, setDirectoriesInput] = useState('');
 
   const handleContentDbChange = async (dbName) => {
     setSelectedContentDb(dbName);
@@ -72,16 +74,59 @@ const Editor = (props) => {
     setTemplateJSON(template);
   };
 
-  const handleCollectionChange = (collection) => {
-    let template = templateJSON;
-    template.template.collections = [collection];
-    setTemplateJSON(template);
+  useEffect(() => {
+    setCollectionsInput(templateJSON.template.collections.join(" OR "));
+    setDirectoriesInput(templateJSON.template.directories.join(" OR "));
+  }, [templateJSON.template.collections, templateJSON.template.directories]);
+
+  const validateInput = (input, fieldName) => {
+    const pattern = /^([\w\/.:]+)( OR [\w\/.:]+)*$/; // Allows words with :, /, . separated by ' OR '
+    if (!pattern.test(input)) {
+      notification.error({
+        message: "Invalid Input",
+        description: `Invalid ${fieldName}. Reverting to original. Use 'value1 OR value2 OR value3' with 'OR' as a separator.`
+      });
+      return false; // Validation failed
+    }
+    return true; // Validation passed
   };
 
-  const handleDirectoryChange = (directory) => {
-    let template = templateJSON;
-    template.template.directories = [directory];
-    setTemplateJSON(template);
+  const handleCollectionsChange = (collections) => {
+    setCollectionsInput(collections); // updates input as user types
+  };
+
+  const handleCollectionsBlur = () => {
+    if (!validateInput(collectionsInput, "Collections")) {
+      // Revert input field
+      setCollectionsInput(templateJSON.template.collections.join(" OR "));
+      return;
+    }
+    // Update main template
+    setTemplateJSON(prev => ({
+      ...prev,
+      template: {
+        ...prev.template,
+        collections: collectionsInput.split(" OR ").map(s => s.trim())
+      }
+    }));
+  };
+
+  const handleDirectoriesChange = (directories) => {
+    setDirectoriesInput(directories); // updates input as user types
+  };
+
+  const handleDirectoriesBlur = () => {
+    if (!validateInput(directoriesInput, "Directories")) {
+      setDirectoriesInput(templateJSON.template.directories.join(" OR "));
+      return;
+    }
+    setTemplateJSON(prev => ({
+      ...prev,
+      template: {
+        ...prev.template,
+        directories: directoriesInput.split(" OR ").map(s => s.trim())
+      }
+    }));
   };
   // Template Management (end)
 
@@ -341,14 +386,16 @@ const Editor = (props) => {
           <Template
             templateURI={selectedTemplateURI}
             context={templateJSON.template.context}
-            collection={templateJSON.template.collections}
-            directory={templateJSON.template.directories}
+            collections={collectionsInput}
+            directories={directoriesInput}
             description={templateJSON.template.description}
             handleURIChange={handleURIChange}
             handleDescriptionChange={handleDescriptionChange}
             handleContextChange={handleContextChange}
-            handleCollectionChange={handleCollectionChange}
-            handleDirectoryChange={handleDirectoryChange}
+            handleCollectionsChange={handleCollectionsChange}
+            handleCollectionsBlur={handleCollectionsBlur}
+            handleDirectoriesChange={handleDirectoriesChange}
+            handleDirectoriesBlur={handleDirectoriesBlur}
           />
           <SampleDocs
             uris={sampleURIs}

@@ -1,8 +1,8 @@
 {
   "template": {
     "context": "/match",
-    "collections": ["soccer"],
-    "directories": ["/soccer/"],
+    "collections": ["soccer", "soccers", "football"],
+    "directories": ["/soccer/", "/soccers/", "/football/"],
     "vars": [
       {
         "name": "prefix",

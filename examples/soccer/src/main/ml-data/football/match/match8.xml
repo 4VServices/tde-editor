@@ -1,0 +1,14 @@
+<match>
+  <id>8</id>
+  <match-date>2025-04-05</match-date>
+  <league>La Liga</league>
+  <teams>
+    <home>Real Madrid</home>
+    <away>Barcelona</away>
+  </teams>
+  <score>
+    <home>3</home>
+    <away>1</away>
+  </score>
+  <abstract>Vinícius Jr. shines in El Clásico victory</abstract>
+</match>

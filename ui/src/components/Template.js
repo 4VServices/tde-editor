@@ -8,10 +8,12 @@ const Template = ({
   handleURIChange,
   handleDescriptionChange,
   description,
-  handleCollectionChange,
-  collection,
-  handleDirectoryChange,
-  directory,
+  handleCollectionsChange,
+  handleCollectionsBlur,
+  collections,
+  handleDirectoriesChange,
+  handleDirectoriesBlur,
+  directories,
   handleContextChange,
   context
 }) => {
@@ -20,8 +22,8 @@ const Template = ({
       <FlexBox flexDirection="column" gap="1rem" alignItems="stretch">
         <TextEdit label="URI" value={templateURI} onChangeDebounced={handleURIChange} />
         <TextEdit label="Description" type="textarea" rows={3} value={description} onChange={handleDescriptionChange} />
-        <TextEdit label="Collection" value={collection} onChange={handleCollectionChange} />
-        <TextEdit label="Directory" value={directory} onChange={handleDirectoryChange} />
+        <TextEdit label="Collections" value={collections} onChange={handleCollectionsChange} onBlur={handleCollectionsBlur} />
+        <TextEdit label="Directories" value={directories} onChange={handleDirectoriesChange} onBlur={handleDirectoriesBlur} />
         <TextEdit label="Context" value={context} onChange={handleContextChange} />
       </FlexBox>
     </Group>
